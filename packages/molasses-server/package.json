@@ -18,5 +18,8 @@
   "dependencies": {
     "@molassesapp/common": "^0.1.3"
   },
-  "gitHead": "c2b2c0422b5424b356cf9788ee16e390bdda3a0c"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "939c3bb0e2d390ded7d422ade06e355b09ccf667"
 }
