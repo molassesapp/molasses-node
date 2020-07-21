@@ -17,5 +17,6 @@
   "license": "MIT",
   "dependencies": {
     "@molassesapp/common": "^0.1.1"
-  }
+  },
+  "gitHead": "ff1e1e504e036cab6c71501a9e012438a63372eb"
 }
