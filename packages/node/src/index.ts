@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
-import { Feature, User, isActive } from "./shared/feature"
+import { Feature, User, isActive } from "@molassesapp/common"
 
 export type Options = {
   APIKey: string

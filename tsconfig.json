@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": true,
+    "module": "commonjs",
+    "target": "es5",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["./packages/**/*", "./shared/**/*"]
+}
+{
+  "extends": "./tsconfig.build.json",
+
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "paths": {
+      "@molassesapp/common": ["common/src"],
+      "@molassesapp/node": ["node/src"],
+      "@molassesapp/browser": ["browser/src"]
+    }
+  }
+}

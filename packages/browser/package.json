@@ -1,0 +1,21 @@
+{
+  "name": "@molassesapp/browser",
+  "version": "0.1.0",
+  "description": "A JavaScript/Typescript SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molassesapp/molasses-node.git"
+  },
+  "author": "Molasses App",
+  "license": "MIT",
+  "dependencies": {
+    "@molassesapp/common": "^0.1.0"
+  }
+}
