@@ -4,7 +4,7 @@
   "description": "A Node (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --outDir dist index.ts",
+    "build": "lerna run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
