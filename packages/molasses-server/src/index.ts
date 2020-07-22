@@ -1,9 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
 import { Feature, User, isActive } from "@molassesapp/common"
 
+/** Options for the `MolassesClient` - APIKey is required */
 export type Options = {
+  /** Sets the API Key to be used in calls to Molasses*/
   APIKey: string
+  /** The based url to be used to call Molasses  */
   URL?: string
+  /** When set to true it starts debug mode */
   Debug?: boolean
 }
 
@@ -23,7 +27,10 @@ export default class MolassesClient {
   private axios?: AxiosInstance
   private refreshInterval = 15000 // 15 seconds
   private timer: NodeJS.Timer | undefined
-
+  /**
+   * Creates a new MolassesClient.
+   * @param  Options options - the settings for the MolassesClient
+   */
   constructor(options: Options) {
     this.options = { ...this.options, ...options }
     if (this.options.APIKey == "") {
@@ -34,6 +41,9 @@ export default class MolassesClient {
     })
   }
 
+  /**
+   * `init` - Initializes the feature toggles by fetching them from the Molasses Server
+   * */
   init() {
     return this.fetchFeatures()
   }
@@ -42,10 +52,18 @@ export default class MolassesClient {
     this.timer = setTimeout(() => this.fetchFeatures(), this.refreshInterval)
   }
 
+  /** Stops any polling by the molasses client */
   stop() {
     clearTimeout(this.timer)
   }
 
+  /**
+   * Checks to see if a feature is active for a user.
+   * A `User` is optional. If no user is passed, it will check if the feature is fully available for a user.
+   * However, if no user is passed and the identify call is in place it will use that user to evaluate
+   * @param string key  - the name of the feature toggle
+   * @param User? user - The user that the feature toggle will be evaluated against.
+   */
   isActive(key: string, user?: User) {
     if (!this.initiated) {
       return false
