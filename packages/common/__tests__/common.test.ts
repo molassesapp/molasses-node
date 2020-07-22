@@ -1,4 +1,4 @@
-import { getUserPercentage } from "../lib/common"
+import { getUserPercentage } from "../src/common"
 
 describe("@molassesapp/common", () => {
   describe("getUserPercentage", () => {

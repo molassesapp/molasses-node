@@ -9,12 +9,9 @@
   "main": "dist/common.js",
   "types": "dist/common.d.ts",
   "directories": {
-    "lib": "lib",
+    "lib": "src",
     "test": "__tests__"
   },
-  "files": [
-    "lib"
-  ],
   "publishConfig": {
     "access": "public"
   },
@@ -26,6 +23,7 @@
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
