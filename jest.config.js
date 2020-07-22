@@ -10,6 +10,9 @@ module.exports = {
       extends: "./babel.config.js",
     },
   },
+  moduleNameMapper: {
+    "@molassesapp/(.*)$": "<rootDir>/packages/$1",
+  },
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },

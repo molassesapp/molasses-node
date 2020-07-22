@@ -12,6 +12,9 @@ module.exports = {
   coverageDirectory: "coverage",
   coverageProvider: "babel",
 
+  moduleNameMapper: {
+    "@molassesapp/common": "<rootDir>/packages/common/src/common",
+  },
   testEnvironment: "node",
   coverageReporters: ["text", "html"],
 }
