@@ -3,11 +3,11 @@ import { Feature, User, isActive } from "@molassesapp/common"
 
 export type Options = {
   APIKey: string
-  URL: string
-  Debug: boolean
+  URL?: string
+  Debug?: boolean
 }
 
-export class MolassesClient {
+export default class MolassesClient {
   private options: Options = {
     APIKey: "",
     URL: "https://www.molasses.app",
@@ -34,20 +34,16 @@ export class MolassesClient {
     })
   }
 
-  init = () => {
+  init() {
     return this.fetchFeatures()
   }
 
   private timedFetch() {
-    if (this.refreshInterval != null && this.refreshInterval > 0) {
-      this.timer = setTimeout(() => this.fetchFeatures(), this.refreshInterval)
-    }
+    this.timer = setTimeout(() => this.fetchFeatures(), this.refreshInterval)
   }
 
   stop() {
-    if (this.timer) {
-      clearTimeout(this.timer)
-    }
+    clearTimeout(this.timer)
   }
 
   isActive(key: string, user?: User) {
@@ -57,7 +53,7 @@ export class MolassesClient {
     return isActive(this.featuresCache[key], user)
   }
 
-  private fetchFeatures = () => {
+  private fetchFeatures() {
     const headers = { Authorization: "Bearer " + this.options.APIKey }
     if (this.etag) {
       headers["If-None-Match"] = this.etag
@@ -69,7 +65,7 @@ export class MolassesClient {
       .then((response: AxiosResponse) => {
         this.timedFetch()
         if (response.status == 304) {
-          return void 0
+          return true
         }
 
         if (response.data && response.data.data) {
@@ -84,7 +80,7 @@ export class MolassesClient {
           this.etag = response.headers["etag"]
           this.initiated = true
         }
-        return void 0
+        return true
       })
       .catch((err: Error) => {
         this.timedFetch()
