@@ -1,4 +1,4 @@
-import MolassesClient from "../src"
+import { MolassesClient } from "../src"
 import mockAxios from "jest-mock-axios"
 import { Feature, SegmentType, Operator } from "@molassesapp/common"
 
