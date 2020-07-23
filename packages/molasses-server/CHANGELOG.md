@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.7](https://github.com/molassesapp/molasses-node/compare/v0.2.6...v0.2.7) (2020-07-23)
+
+
+### Bug Fixes
+
+* we don't need prepublish ([c734beb](https://github.com/molassesapp/molasses-node/commit/c734beb786f1c5a411a337072f0835d3bdccb30d))
+
+
+
+
+
 ## [0.2.6](https://github.com/molassesapp/molasses-node/compare/v0.2.5...v0.2.6) (2020-07-23)
 
 **Note:** Version bump only for package @molassesapp/molasses-server
