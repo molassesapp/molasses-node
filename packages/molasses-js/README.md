@@ -1,16 +1,18 @@
-# Molasses-server
+# Molasses-JS
 
-> Molasses Node SDK
+> MolassesJS
 
-It includes the Node (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
+It includes the Browser (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
 
-`Molasses-server` uses polling to check if you have updated features. Once initialized, it takes microseconds to evaluate if a user is active.
+`Molasses-JS` - Once initialized, it takes microseconds to evaluate if a user is active.
 
 ## Install
 
 `npm install @molassesapp/molasses-server`
 
 `yarn add @molassesapp/molasses-server`
+
+`<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@molassesapp/molasses-js@0.2.5/dist/molasses.min.js" />`
 
 ## Usage
 
@@ -20,6 +22,8 @@ To Require:
 import { MolassesClient } from "@molassesapp/molasses-server"
 // or
 const { MolassesClient } = require("@molassesapp/molasses-server")
+// or if using a script tag
+var MolassesClient = MolassesJS.MolassesClient
 ```
 
 Using it:
