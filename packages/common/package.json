@@ -23,7 +23,6 @@
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {

@@ -10,7 +10,6 @@
     "build:umd:min": "webpack src/index.ts -o dist/molasses.min.js --config webpack.config.production.js",
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
-    "prepublishOnly": "tsc",
     "test": "jest"
   },
   "repository": {
