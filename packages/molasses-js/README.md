@@ -12,7 +12,7 @@ It includes the Browser (with TypeScript support) SDK for Molasses. It allows yo
 
 `yarn add @molassesapp/molasses-server`
 
-`<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@molassesapp/molasses-js@0.2.5/dist/molasses.min.js" />`
+`<script src="https://cdn.jsdelivr.net/npm/@molassesapp/molasses-js@0.2.7/dist/molasses.min.js"></script>`
 
 ## Usage
 
