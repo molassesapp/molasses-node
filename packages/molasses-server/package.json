@@ -1,6 +1,6 @@
 {
   "name": "@molassesapp/molasses-server",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "A Node (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.",
   "main": "dist/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Molasses App",
   "license": "MIT",
   "dependencies": {
-    "@molassesapp/common": "^0.1.5"
+    "@molassesapp/common": "^0.2.0"
   },
   "publishConfig": {
     "access": "public"
