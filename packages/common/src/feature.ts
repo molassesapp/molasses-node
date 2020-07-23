@@ -1,5 +1,6 @@
 import { str } from "crc-32"
 export interface Feature {
+  id?: string
   key: string
   description: string
   // variants: Variant[];

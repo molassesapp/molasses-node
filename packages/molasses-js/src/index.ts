@@ -122,10 +122,12 @@ export default class MolassesClient {
     if (user && key != "") {
       const feature = this.featuresCache[key]
       const result = isActive(feature, user)
-      user.params["event_details"] = additionalDetails
       this.uploadEvent({
         event: "experiment_success",
-        tags: user.params,
+        tags: {
+          ...user.params,
+          ...additionalDetails,
+        },
         userId: user.id,
         featureId: feature.id,
         featureName: key,
