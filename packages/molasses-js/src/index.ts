@@ -24,7 +24,7 @@ type EventOptions = {
   testType?: string
 }
 
-export default class MolassesClient {
+export class MolassesClient {
   private options: Options = {
     APIKey: "",
     URL: "https://www.molasses.app",
