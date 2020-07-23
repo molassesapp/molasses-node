@@ -8,16 +8,28 @@ export type Options = {
   /** The based url to be used to call Molasses  */
   URL?: string
   /** When set to true it starts debug mode */
-  Debug?: boolean
+  debug?: boolean
+  /** Whether to send user event data back for reporting. Defaults to true */
+  sendEvents?: boolean
   /** Where to store the feature data -- defaults to `memory`. `localstorage` allows for user backup*/
   storage?: "localstorage" | "memory"
+}
+
+type EventOptions = {
+  featureId: string
+  userId: string
+  featureName: string
+  event: "experiment_started" | "experiment_success"
+  tags?: { [key: string]: string }
+  testType?: string
 }
 
 export default class MolassesClient {
   private options: Options = {
     APIKey: "",
     URL: "https://www.molasses.app",
-    Debug: false,
+    debug: false,
+    sendEvents: true,
   }
 
   private featuresCache: {
@@ -83,7 +95,54 @@ export default class MolassesClient {
       user = this.user
     }
 
-    return isActive(this.featuresCache[key], user)
+    const feature = this.featuresCache[key]
+    const result = isActive(feature, user)
+    if (user && this.options.sendEvents) {
+      this.uploadEvent({
+        event: "experiment_started",
+        tags: user.params,
+        userId: user.id,
+        featureId: feature.id,
+        featureName: key,
+        testType: result ? "experiment" : "control",
+      })
+    }
+    return result
+  }
+
+  experimentSuccess(key: string, additionalDetails: { [key: string]: string }, user?: User) {
+    if (!this.initiated || !this.options.sendEvents) {
+      return false
+    }
+
+    if (!user && this.user) {
+      user = this.user
+    }
+
+    if (user && key != "") {
+      const feature = this.featuresCache[key]
+      const result = isActive(feature, user)
+      user.params["event_details"] = additionalDetails
+      this.uploadEvent({
+        event: "experiment_success",
+        tags: user.params,
+        userId: user.id,
+        featureId: feature.id,
+        featureName: key,
+        testType: result ? "experiment" : "control",
+      })
+    }
+  }
+
+  private uploadEvent(eventOptions: EventOptions) {
+    const headers = { Authorization: "Bearer " + this.options.APIKey }
+    const data = {
+      ...eventOptions,
+      tags: JSON.stringify(eventOptions.tags),
+    }
+    axios.post("https://us-central1-molasses-36bff.cloudfunctions.net/analytics", data, {
+      headers,
+    })
   }
 
   private fetchFeatures() {
