@@ -1,6 +1,6 @@
 {
   "name": "@molassesapp/common",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "This is the common package for the @molasses node work - do not install instead use molasses-js or molasses-server",
   "keywords": [],
   "author": "James Hrisho <james.hrisho@gmail.com>",
