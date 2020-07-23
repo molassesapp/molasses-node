@@ -5,7 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run clean && npm run compile",
+    "build": "npm run clean && npm run compile && npm run build:umd && npm run build:umd:min",
+    "build:umd": "webpack src/index.ts -o dist/molasses.js",
+    "build:umd:min": "webpack src/index.ts -o dist/molasses.min.js --config webpack.config.production.js",
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "tsc",
@@ -23,5 +25,11 @@
   "dependencies": {
     "@molassesapp/common": "^0.2.4"
   },
-  "gitHead": "939c3bb0e2d390ded7d422ade06e355b09ccf667"
+  "gitHead": "939c3bb0e2d390ded7d422ade06e355b09ccf667",
+  "devDependencies": {
+    "babel-loader": "^8.1.0",
+    "ts-loader": "^8.0.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
+  }
 }
