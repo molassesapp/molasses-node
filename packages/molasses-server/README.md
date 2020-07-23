@@ -15,6 +15,7 @@ It includes the Node (with TypeScript support) SDK for Molasses. It allows you t
 ## Usage
 
 ```js
+import { MolassesClient } from "@molassesapp/molasses-server"
 // Initialize with your API Key
 const client = new MolassesClient({
   APIKey: "testapikey",

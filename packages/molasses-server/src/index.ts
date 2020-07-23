@@ -22,7 +22,7 @@ type EventOptions = {
   testType?: string
 }
 
-export default class MolassesClient {
+export class MolassesClient {
   private options: Options = {
     APIKey: "",
     URL: "https://www.molasses.app",
@@ -134,6 +134,9 @@ export default class MolassesClient {
     }
     return this.axios
       .get("/v1/sdk/features", {
+        validateStatus: function (status) {
+          return (status >= 200 && status < 300) || status == 304 // allow for 304
+        },
         headers,
       })
       .then((response: AxiosResponse) => {
@@ -158,7 +161,7 @@ export default class MolassesClient {
       })
       .catch((err: Error) => {
         this.timedFetch()
-        throw err
+        throw new Error("Molasses - " + err.message)
       })
   }
 }

@@ -168,7 +168,7 @@ export default class MolassesClient {
         return true
       })
       .catch((err: Error) => {
-        throw err
+        throw new Error("Molasses - " + err.message)
       })
   }
 }
