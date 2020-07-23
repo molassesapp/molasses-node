@@ -49,6 +49,9 @@ export class MolassesClient {
       throw new Error("API KEY is required for Molasses to start")
     }
     this.axios = axios.create({
+      validateStatus: function (status) {
+        return (status >= 200 && status < 300) || status == 304 // allow for 304
+      },
       baseURL: this.options.URL,
     })
   }
@@ -134,9 +137,6 @@ export class MolassesClient {
     }
     return this.axios
       .get("/v1/sdk/features", {
-        validateStatus: function (status) {
-          return (status >= 200 && status < 300) || status == 304 // allow for 304
-        },
         headers,
       })
       .then((response: AxiosResponse) => {
