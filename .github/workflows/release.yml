@@ -30,16 +30,6 @@ jobs:
         id: lerna_version
         run: |
           echo "::set-output name=version::v$(npm run version --silent)"
-      - name: Check if release tag is already created
-        id: vars
-        run: |
-          lerna_version=${{ steps.lerna_version.outputs.version }}
-          if [[ -z $(git tag -l "$lerna_version") ]]; then
-            echo "Proceeding to create new release"
-          else
-            echo "New release already created, exiting."
-            exit 1
-          fi
       - run: npx lerna bootstrap --hoist
       - run: npm run build --if-present
       - name: Create release
