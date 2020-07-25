@@ -13,6 +13,7 @@ export interface FeatureSegment {
   percentage: number
   userConstraints: UserConstraint[]
   segmentType: SegmentType
+  constraint: Operator
 }
 export interface UserConstraint {
   featureSegmentID?: string
@@ -29,6 +30,7 @@ export enum SegmentType {
 }
 
 export enum Operator {
+  any = "any",
   all = "all",
   in = "in",
   nin = "nin",
@@ -109,6 +111,9 @@ const containsParamValue = (listAsString: string, a: string) => {
 }
 
 const isUserInSegment = (user: User, s: FeatureSegment) => {
+  const constraintsToBeMet = s.constraint == Operator.any ? 1 : s.userConstraints.length
+  let constraintsMet = 0
+
   for (let index = 0; index < s.userConstraints.length; index++) {
     const constraint = s.userConstraints[index]
 
@@ -118,41 +123,48 @@ const isUserInSegment = (user: User, s: FeatureSegment) => {
       paramExists = true
       userValue = user.id
     }
-
-    switch (constraint.operator) {
-      case Operator.in:
-        if (paramExists && containsParamValue(constraint.values, userValue)) {
-          return true
-        }
-        break
-      case Operator.nin:
-        if (paramExists && !containsParamValue(constraint.values, userValue)) {
-          return true
-        }
-        break
-      case Operator.equals:
-        if (paramExists && userValue === constraint.values) {
-          return true
-        }
-        break
-      case Operator.doesNotEqual:
-        if (paramExists && userValue !== constraint.values) {
-          return true
-        }
-        break
-      case Operator.contains:
-        if (paramExists && userValue.includes(constraint.values)) {
-          return true
-        }
-        break
-      case Operator.doesNotContain:
-        if (paramExists && !userValue.includes(constraint.values)) {
-          return true
-        }
-        break
-      default:
-        return false
+    if (meetsConstraint(userValue, paramExists, constraint)) {
+      constraintsMet = constraintsMet + 1
     }
+  }
+
+  return constraintsMet >= constraintsToBeMet
+}
+
+const meetsConstraint = (userValue: string, paramExists: boolean, constraint: UserConstraint) => {
+  switch (constraint.operator) {
+    case Operator.in:
+      if (paramExists && containsParamValue(constraint.values, userValue)) {
+        return true
+      }
+      break
+    case Operator.nin:
+      if (paramExists && !containsParamValue(constraint.values, userValue)) {
+        return true
+      }
+      break
+    case Operator.equals:
+      if (paramExists && userValue === constraint.values) {
+        return true
+      }
+      break
+    case Operator.doesNotEqual:
+      if (paramExists && userValue !== constraint.values) {
+        return true
+      }
+      break
+    case Operator.contains:
+      if (paramExists && userValue.includes(constraint.values)) {
+        return true
+      }
+      break
+    case Operator.doesNotContain:
+      if (paramExists && !userValue.includes(constraint.values)) {
+        return true
+      }
+      break
+    default:
+      return false
   }
   return false
 }
