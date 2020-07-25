@@ -27,7 +27,7 @@ type EventOptions = {
 export class MolassesClient {
   private options: Options = {
     APIKey: "",
-    URL: "https://us-central1-molasses-36bff.cloudfunctions.net/v1",
+    URL: "https://us-central1-molasses-36bff.cloudfunctions.net",
     debug: false,
     sendEvents: true,
   }
