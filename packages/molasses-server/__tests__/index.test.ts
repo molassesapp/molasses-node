@@ -286,9 +286,20 @@ describe("@molassesapp/molasses-server", () => {
             {
               percentage: 100,
               segmentType: SegmentType.alwaysControl,
+              constraint: Operator.all,
               userConstraints: [
                 {
                   userParam: "isScaredUser",
+                  operator: Operator.contains,
+                  values: "scared",
+                },
+                {
+                  userParam: "isDefinitelyScaredUser",
+                  operator: Operator.contains,
+                  values: "scared",
+                },
+                {
+                  userParam: "isMostDefinitelyScaredUser",
                   operator: Operator.contains,
                   values: "scared",
                 },
@@ -297,9 +308,15 @@ describe("@molassesapp/molasses-server", () => {
             {
               percentage: 100,
               segmentType: SegmentType.alwaysExperiment,
+              constraint: Operator.any,
               userConstraints: [
                 {
                   userParam: "isBetaUser",
+                  operator: Operator.doesNotContain,
+                  values: "fal",
+                },
+                {
+                  userParam: "isDefinitelyBetaUser",
                   operator: Operator.doesNotContain,
                   values: "fal",
                 },
@@ -341,6 +358,25 @@ describe("@molassesapp/molasses-server", () => {
             id: "123",
             params: {
               isScaredUser: "i am very scared man",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("FOO_TEST", {
+            id: "123",
+            params: {
+              isScaredUser: "i am very scared man",
+              isDefinitelyScaredUser: "i am very scared man",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("FOO_TEST", {
+            id: "123",
+            params: {
+              isScaredUser: "i am very scared man",
+              isDefinitelyScaredUser: "i am very scared man",
+              isMostDefinitelyScaredUser: "i am very scared man",
             },
           }),
         ).toBeFalsy()
