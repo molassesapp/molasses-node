@@ -14,46 +14,50 @@ describe("@molassesapp/molasses-js", () => {
   })
   it("should be initable when it goes to molasses.app", (done) => {
     const response: {
-      data: Feature[]
+      data: {
+        features: Feature[]
+      }
     } = {
-      data: [
-        {
-          active: true,
-          description: "foo",
-          key: "FOO_TEST",
-          segments: [],
-        },
-        {
-          active: false,
-          description: "foo",
-          key: "FOO_FALSE_TEST",
-          segments: [],
-        },
-        {
-          active: true,
-          description: "foo",
-          key: "FOO_50_PERCENT_TEST",
-          segments: [
-            {
-              segmentType: SegmentType.everyoneElse,
-              percentage: 50,
-              userConstraints: [],
-            },
-          ],
-        },
-        {
-          active: true,
-          description: "foo",
-          key: "FOO_0_PERCENT_TEST",
-          segments: [
-            {
-              segmentType: SegmentType.everyoneElse,
-              percentage: 0,
-              userConstraints: [],
-            },
-          ],
-        },
-      ],
+      data: {
+        features: [
+          {
+            active: true,
+            description: "foo",
+            key: "FOO_TEST",
+            segments: [],
+          },
+          {
+            active: false,
+            description: "foo",
+            key: "FOO_FALSE_TEST",
+            segments: [],
+          },
+          {
+            active: true,
+            description: "foo",
+            key: "FOO_50_PERCENT_TEST",
+            segments: [
+              {
+                segmentType: SegmentType.everyoneElse,
+                percentage: 50,
+                userConstraints: [],
+              },
+            ],
+          },
+          {
+            active: true,
+            description: "foo",
+            key: "FOO_0_PERCENT_TEST",
+            segments: [
+              {
+                segmentType: SegmentType.everyoneElse,
+                percentage: 0,
+                userConstraints: [],
+              },
+            ],
+          },
+        ],
+      },
     }
 
     const client = new MolassesClient({
@@ -74,7 +78,7 @@ describe("@molassesapp/molasses-js", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/v1/sdk/features", {
+    expect(mockAxios.get).toBeCalledWith("/get-features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })
@@ -82,44 +86,48 @@ describe("@molassesapp/molasses-js", () => {
 
   it("should handle complex user segments", (done) => {
     const response: {
-      data: Feature[]
+      data: {
+        features: Feature[]
+      }
     } = {
-      data: [
-        {
-          active: true,
-          description: "foo",
-          key: "FOO_TEST",
-          segments: [
-            {
-              percentage: 100,
-              segmentType: SegmentType.alwaysControl,
-              userConstraints: [
-                {
-                  userParam: "isScaredUser",
-                  operator: Operator.in,
-                  values: "true,maybe",
-                },
-              ],
-            },
-            {
-              percentage: 100,
-              segmentType: SegmentType.alwaysExperiment,
-              userConstraints: [
-                {
-                  userParam: "isBetaUser",
-                  operator: Operator.equals,
-                  values: "true",
-                },
-              ],
-            },
-            {
-              percentage: 100,
-              segmentType: SegmentType.everyoneElse,
-              userConstraints: [],
-            },
-          ],
-        },
-      ],
+      data: {
+        features: [
+          {
+            active: true,
+            description: "foo",
+            key: "FOO_TEST",
+            segments: [
+              {
+                percentage: 100,
+                segmentType: SegmentType.alwaysControl,
+                userConstraints: [
+                  {
+                    userParam: "isScaredUser",
+                    operator: Operator.in,
+                    values: "true,maybe",
+                  },
+                ],
+              },
+              {
+                percentage: 100,
+                segmentType: SegmentType.alwaysExperiment,
+                userConstraints: [
+                  {
+                    userParam: "isBetaUser",
+                    operator: Operator.equals,
+                    values: "true",
+                  },
+                ],
+              },
+              {
+                percentage: 100,
+                segmentType: SegmentType.everyoneElse,
+                userConstraints: [],
+              },
+            ],
+          },
+        ],
+      },
     }
 
     const client = new MolassesClient({
@@ -152,7 +160,7 @@ describe("@molassesapp/molasses-js", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/v1/sdk/features", {
+    expect(mockAxios.get).toBeCalledWith("/get-features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })

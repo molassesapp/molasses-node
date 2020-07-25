@@ -25,7 +25,7 @@ type EventOptions = {
 export class MolassesClient {
   private options: Options = {
     APIKey: "",
-    URL: "https://www.molasses.app",
+    URL: "https://api.molasses.app/v1",
     debug: false,
     sendEvents: true,
   }
@@ -125,7 +125,7 @@ export class MolassesClient {
       ...eventOptions,
       tags: JSON.stringify(eventOptions.tags),
     }
-    axios.post("https://us-central1-molasses-36bff.cloudfunctions.net/analytics", data, {
+    this.axios.post("/analytics", data, {
       headers,
     })
   }
@@ -136,7 +136,7 @@ export class MolassesClient {
       headers["If-None-Match"] = this.etag
     }
     return this.axios
-      .get("/v1/sdk/features", {
+      .get("/get-features", {
         headers,
       })
       .then((response: AxiosResponse) => {
@@ -145,8 +145,8 @@ export class MolassesClient {
           return true
         }
 
-        if (response.data && response.data.data) {
-          const jsonData: Feature[] = response.data.data
+        if (response.data && response.data.data && response.data.data.features) {
+          const jsonData: Feature[] = response.data.data.features
           this.featuresCache = jsonData.reduce<{ [key: string]: Feature }>(
             (acc, value: Feature) => {
               acc[value.key] = value
