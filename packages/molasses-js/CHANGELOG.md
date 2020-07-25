@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/molassesapp/molasses-node/compare/v0.3.0...v0.3.1) (2020-07-25)
+
+
+### Bug Fixes
+
+* use api.molasses.app/v1 for base route ([d246dc3](https://github.com/molassesapp/molasses-node/commit/d246dc36be3fd8e3e4e60ec1c3ea9f22ebb21e2b))
+
+
+
+
+
 # [0.3.0](https://github.com/molassesapp/molasses-node/compare/v0.2.7...v0.3.0) (2020-07-25)
 
 **Note:** Version bump only for package @molassesapp/molasses-js
