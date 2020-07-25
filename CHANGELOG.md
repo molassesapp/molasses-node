@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/molassesapp/molasses-node/compare/v0.3.1...v0.3.2) (2020-07-25)
+
+
+### Bug Fixes
+
+* Use cloud functions url directly since the domain name adds a ton of latency ([f3c4075](https://github.com/molassesapp/molasses-node/commit/f3c40757dc93b8a055d7852f46d24a065300b14c))
+
+
+
+
+
 ## [0.3.1](https://github.com/molassesapp/molasses-node/compare/v0.3.0...v0.3.1) (2020-07-25)
 
 
