@@ -1,4 +1,7 @@
-# Molasses-server
+<p align="center">
+<img src="https://raw.githubusercontent.com/molassesapp/molasses-go/main/logo.png" style="margin: 0px auto;" width="200"/></p>
+
+<h1 align="center">Molasses Node</h1>
 
 > Molasses Node SDK
 

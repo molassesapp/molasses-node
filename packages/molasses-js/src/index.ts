@@ -54,13 +54,13 @@ export class MolassesClient {
   }
 
   /**
-   * `init` - Initializes the feature toggles by fetching them from the Molasses Server
+   * `init` - Initializes the feature flags by fetching them from the Molasses Server
    * */
   init() {
     return this.fetchFeatures()
   }
 
-  /** `reinit` - Reinitializes the feature toggles by refetching them from the Molasses Server*/
+  /** `reinit` - Reinitializes the feature flags by refetching them from the Molasses Server*/
   reinit() {
     return this.fetchFeatures()
   }
@@ -83,8 +83,8 @@ export class MolassesClient {
    * Checks to see if a feature is active for a user.
    * A `User` is optional. If no user is passed, it will check if the feature is fully available for a user.
    * However, if no user is passed and the identify call is in place it will use that user to evaluate
-   * @param string key  - the name of the feature toggle
-   * @param User? user - The user that the feature toggle will be evaluated against.
+   * @param string key  - the name of the feature flag
+   * @param User? user - The user that the feature flag will be evaluated against.
    */
   isActive(key: string, user?: User) {
     if (!this.initiated) {
