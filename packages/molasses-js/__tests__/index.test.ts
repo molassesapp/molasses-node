@@ -38,6 +38,7 @@ describe("@molassesapp/molasses-js", () => {
             key: "FOO_50_PERCENT_TEST",
             segments: [
               {
+                constraint: Operator.all,
                 segmentType: SegmentType.everyoneElse,
                 percentage: 50,
                 userConstraints: [],
@@ -50,6 +51,7 @@ describe("@molassesapp/molasses-js", () => {
             key: "FOO_0_PERCENT_TEST",
             segments: [
               {
+                constraint: Operator.all,
                 segmentType: SegmentType.everyoneElse,
                 percentage: 0,
                 userConstraints: [],
@@ -100,6 +102,7 @@ describe("@molassesapp/molasses-js", () => {
               {
                 percentage: 100,
                 segmentType: SegmentType.alwaysControl,
+                constraint: Operator.all,
                 userConstraints: [
                   {
                     userParam: "isScaredUser",
@@ -111,6 +114,7 @@ describe("@molassesapp/molasses-js", () => {
               {
                 percentage: 100,
                 segmentType: SegmentType.alwaysExperiment,
+                constraint: Operator.all,
                 userConstraints: [
                   {
                     userParam: "isBetaUser",
@@ -120,6 +124,7 @@ describe("@molassesapp/molasses-js", () => {
                 ],
               },
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.everyoneElse,
                 userConstraints: [],

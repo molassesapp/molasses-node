@@ -37,6 +37,7 @@ describe("@molassesapp/molasses-server", () => {
             key: "FOO_50_PERCENT_TEST",
             segments: [
               {
+                constraint: Operator.all,
                 segmentType: SegmentType.everyoneElse,
                 percentage: 50,
                 userConstraints: [],
@@ -49,6 +50,7 @@ describe("@molassesapp/molasses-server", () => {
             key: "FOO_0_PERCENT_TEST",
             segments: [
               {
+                constraint: Operator.all,
                 segmentType: SegmentType.everyoneElse,
                 percentage: 0,
                 userConstraints: [],
@@ -105,6 +107,7 @@ describe("@molassesapp/molasses-server", () => {
             key: "FOO_TEST",
             segments: [
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.alwaysControl,
                 userConstraints: [
@@ -116,6 +119,7 @@ describe("@molassesapp/molasses-server", () => {
                 ],
               },
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.alwaysExperiment,
                 userConstraints: [
@@ -127,6 +131,7 @@ describe("@molassesapp/molasses-server", () => {
                 ],
               },
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.everyoneElse,
                 userConstraints: [],
@@ -198,6 +203,7 @@ describe("@molassesapp/molasses-server", () => {
             key: "FOO_TEST",
             segments: [
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.alwaysControl,
                 userConstraints: [
@@ -209,6 +215,7 @@ describe("@molassesapp/molasses-server", () => {
                 ],
               },
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.alwaysExperiment,
                 userConstraints: [
@@ -220,6 +227,7 @@ describe("@molassesapp/molasses-server", () => {
                 ],
               },
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.everyoneElse,
                 userConstraints: [],
@@ -330,6 +338,7 @@ describe("@molassesapp/molasses-server", () => {
                 ],
               },
               {
+                constraint: Operator.all,
                 percentage: 100,
                 segmentType: SegmentType.everyoneElse,
                 userConstraints: [],
