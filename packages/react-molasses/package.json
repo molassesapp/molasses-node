@@ -1,6 +1,6 @@
 {
   "name": "react-molasses",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "React package for interacting with Molasses' API",
   "keywords": [
     "molasses",
@@ -45,8 +45,8 @@
     "react-dom": "^16.13.1"
   },
   "dependencies": {
-    "@molassesapp/common": "^0.3.0",
-    "@molassesapp/molasses-js": "^0.3.2"
+    "@molassesapp/common": "^0.4.0",
+    "@molassesapp/molasses-js": "^0.4.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
