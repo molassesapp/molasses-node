@@ -30,8 +30,8 @@
   },
   "scripts": {
     "build": "npm run clean && npm run compile && npm run build:umd && npm run build:umd:min",
-    "build:umd": "webpack src/index.ts -o dist/molasses.js",
-    "build:umd:min": "webpack src/index.ts -o dist/molasses.min.js --config webpack.config.production.js",
+    "build:umd": "webpack src/index.tsx -o dist/molasses.js",
+    "build:umd:min": "webpack src/index.tsx -o dist/molasses.min.js --config webpack.config.production.js",
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.build.json",
     "test": "jest"
