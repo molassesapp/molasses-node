@@ -3,7 +3,7 @@
 
 module.exports = {
   moduleFileExtensions: ["ts", "tsx", "js"],
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$",
+  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.ts?",
   testPathIgnorePatterns: ["/node_modules/", "(/__tests__/.*|(\\.|/)(test|spec))\\.d.ts$"],
   // setupFilesAfterEnv: ['<rootDir>packages/setupTests.ts'],
   clearMocks: true,
@@ -14,6 +14,7 @@ module.exports = {
 
   moduleNameMapper: {
     "@molassesapp/common": "<rootDir>/packages/common/src/common",
+    "@molassesapp/molassesjs": "<rootDir>/packages/molasses-js/src/index",
   },
   testEnvironment: "node",
   coverageReporters: ["text", "html"],

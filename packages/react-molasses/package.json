@@ -1,0 +1,56 @@
+{
+  "name": "react-molasses",
+  "version": "0.3.2",
+  "description": "React package for interacting with Molasses' API",
+  "keywords": [
+    "molasses",
+    "feature",
+    "toggles",
+    "feature",
+    "flags",
+    "a",
+    "b",
+    "testing"
+  ],
+  "author": "James Hrisho <james.hrisho@gmail.com>",
+  "homepage": "https://github.com/molassesapp/molasses-node/tree/master/packages/react-molasses#readme",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molassesapp/molasses-node.git"
+  },
+  "scripts": {
+    "build": "npm run clean && npm run compile && npm run build:umd && npm run build:umd:min",
+    "build:umd": "webpack src/index.ts -o dist/molasses.js",
+    "build:umd:min": "webpack src/index.ts -o dist/molasses.min.js --config webpack.config.production.js",
+    "clean": "rm -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "test": "jest"
+  },
+  "bugs": {
+    "url": "https://github.com/molassesapp/molasses-node/issues"
+  },
+  "peerDependencies": {
+    "@molassesapp/molasses-js": "^0.3.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "dependencies": {
+    "@molassesapp/common": "^0.3.0",
+    "@molassesapp/molasses-js": "^0.3.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.0.0",
+    "@types/react": "^16.9.49"
+  }
+}

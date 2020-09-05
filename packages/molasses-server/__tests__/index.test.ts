@@ -1,8 +1,113 @@
 import { MolassesClient } from "../src"
 import mockAxios from "jest-mock-axios"
 import { Feature, SegmentType, Operator } from "@molassesapp/common"
+const user = {
+  id: "123",
+  params: {
+    isScaredUser: "false",
+  },
+}
+
+const response: {
+  data: { features: Feature[] }
+} = {
+  data: {
+    features: [
+      {
+        active: true,
+        description: "foo",
+        key: "FOO_TEST",
+        segments: [
+          {
+            constraint: Operator.all,
+            percentage: 100,
+            segmentType: SegmentType.alwaysControl,
+            userConstraints: [
+              {
+                userParam: "isScaredUser",
+                operator: Operator.in,
+                values: "true,maybe",
+              },
+            ],
+          },
+          {
+            constraint: Operator.all,
+            percentage: 100,
+            segmentType: SegmentType.alwaysExperiment,
+            userConstraints: [
+              {
+                userParam: "isBetaUser",
+                operator: Operator.equals,
+                values: "true",
+              },
+            ],
+          },
+          {
+            constraint: Operator.all,
+            percentage: 100,
+            segmentType: SegmentType.everyoneElse,
+            userConstraints: [],
+          },
+        ],
+      },
+    ],
+  },
+}
+
+const responseB: {
+  data: { features: Feature[] }
+} = {
+  data: {
+    features: [
+      {
+        active: true,
+        description: "foo",
+        key: "FOO_TEST",
+        segments: [
+          {
+            constraint: Operator.all,
+            percentage: 100,
+            segmentType: SegmentType.alwaysControl,
+            userConstraints: [
+              {
+                userParam: "isScaredUser",
+                operator: Operator.nin,
+                values: "false,maybe",
+              },
+            ],
+          },
+          {
+            constraint: Operator.all,
+            percentage: 100,
+            segmentType: SegmentType.alwaysExperiment,
+            userConstraints: [
+              {
+                userParam: "isBetaUser",
+                operator: Operator.doesNotEqual,
+                values: "false",
+              },
+            ],
+          },
+          {
+            constraint: Operator.all,
+            percentage: 100,
+            segmentType: SegmentType.everyoneElse,
+            userConstraints: [],
+          },
+        ],
+      },
+    ],
+  },
+}
 
 describe("@molassesapp/molasses-server", () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+  })
+  afterEach(() => {
+    jest.clearAllTimers()
+    mockAxios.reset()
+  })
   it("should error with no api key", () => {
     try {
       new MolassesClient({
@@ -86,62 +191,17 @@ describe("@molassesapp/molasses-server", () => {
     mockAxios.mockResponse({ data: response })
   })
 
-  it("calling isActive before init returns false", () => {
+  it("calling  before init returns false on actions", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
     })
     expect(client.isActive("FOO_TEST")).toBeFalsy()
     expect(client.isActive("FOO_OFF_TEST")).toBeFalsy()
+    expect(client.experimentSuccess("FOO_TEST", {}, user)).toBeFalsy()
   })
 
   it("should handle complex user segments", (done) => {
-    const response: {
-      data: { features: Feature[] }
-    } = {
-      data: {
-        features: [
-          {
-            active: true,
-            description: "foo",
-            key: "FOO_TEST",
-            segments: [
-              {
-                constraint: Operator.all,
-                percentage: 100,
-                segmentType: SegmentType.alwaysControl,
-                userConstraints: [
-                  {
-                    userParam: "isScaredUser",
-                    operator: Operator.in,
-                    values: "true,maybe",
-                  },
-                ],
-              },
-              {
-                constraint: Operator.all,
-                percentage: 100,
-                segmentType: SegmentType.alwaysExperiment,
-                userConstraints: [
-                  {
-                    userParam: "isBetaUser",
-                    operator: Operator.equals,
-                    values: "true",
-                  },
-                ],
-              },
-              {
-                constraint: Operator.all,
-                percentage: 100,
-                segmentType: SegmentType.everyoneElse,
-                userConstraints: [],
-              },
-            ],
-          },
-        ],
-      },
-    }
-
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
@@ -192,52 +252,6 @@ describe("@molassesapp/molasses-server", () => {
   })
 
   it("should handle more complex user segments", (done) => {
-    const response: {
-      data: { features: Feature[] }
-    } = {
-      data: {
-        features: [
-          {
-            active: true,
-            description: "foo",
-            key: "FOO_TEST",
-            segments: [
-              {
-                constraint: Operator.all,
-                percentage: 100,
-                segmentType: SegmentType.alwaysControl,
-                userConstraints: [
-                  {
-                    userParam: "isScaredUser",
-                    operator: Operator.nin,
-                    values: "false,maybe",
-                  },
-                ],
-              },
-              {
-                constraint: Operator.all,
-                percentage: 100,
-                segmentType: SegmentType.alwaysExperiment,
-                userConstraints: [
-                  {
-                    userParam: "isBetaUser",
-                    operator: Operator.doesNotEqual,
-                    values: "false",
-                  },
-                ],
-              },
-              {
-                constraint: Operator.all,
-                percentage: 100,
-                segmentType: SegmentType.everyoneElse,
-                userConstraints: [],
-              },
-            ],
-          },
-        ],
-      },
-    }
-
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
@@ -284,11 +298,11 @@ describe("@molassesapp/molasses-server", () => {
     expect(mockAxios.get).toBeCalledWith("/get-features", {
       headers: { Authorization: "Bearer testapikey" },
     })
-    mockAxios.mockResponse({ data: response })
+    mockAxios.mockResponse({ data: responseB })
   })
 
   it("should handle even more complex user segments", (done) => {
-    const response: {
+    const responseC: {
       data: { features: Feature[] }
     } = {
       data: {
@@ -414,6 +428,140 @@ describe("@molassesapp/molasses-server", () => {
     expect(mockAxios.get).toBeCalledWith("/get-features", {
       headers: { Authorization: "Bearer testapikey" },
     })
+    mockAxios.mockResponse({ data: responseC })
+  })
+
+  it("should handle refresh", (done) => {
+    const client = new MolassesClient({
+      APIKey: "testapikey",
+      sendEvents: false,
+      refreshInterval: 100,
+    })
+    client
+      .init()
+      .then(() => {
+        expect(client.isActive("FOO_TEST")).toBeTruthy()
+        jest.runAllTimers()
+        expect(mockAxios.get).toBeCalledWith("/get-features", {
+          headers: { Authorization: "Bearer testapikey", "If-None-Match": "yo" },
+        })
+        done()
+      })
+      .catch((reason) => {
+        console.error(reason)
+      })
+    expect(mockAxios.get).toBeCalledWith("/get-features", {
+      headers: { Authorization: "Bearer testapikey" },
+    })
+    mockAxios.mockResponse({ data: response, headers: { etag: "yo" } })
+  })
+
+  it("should handle failures", (done) => {
+    const client = new MolassesClient({
+      APIKey: "testapikey",
+      sendEvents: false,
+      refreshInterval: 100,
+    })
+    client.init().catch((reason) => {
+      done()
+    })
+    expect(mockAxios.get).toBeCalledWith("/get-features", {
+      headers: { Authorization: "Bearer testapikey" },
+    })
+    mockAxios.mockError(new Error("fail"))
+  })
+
+  it("should handle sending events", (done) => {
+    const response: {
+      data: { features: Feature[] }
+    } = {
+      data: {
+        features: [
+          {
+            active: true,
+            description: "foo",
+            key: "FOO_TEST",
+            segments: [
+              {
+                constraint: Operator.all,
+                percentage: 100,
+                segmentType: SegmentType.alwaysControl,
+                userConstraints: [
+                  {
+                    userParam: "isScaredUser",
+                    operator: Operator.in,
+                    values: "true,maybe",
+                  },
+                ],
+              },
+              {
+                constraint: Operator.all,
+                percentage: 100,
+                segmentType: SegmentType.alwaysExperiment,
+                userConstraints: [
+                  {
+                    userParam: "isBetaUser",
+                    operator: Operator.equals,
+                    values: "true",
+                  },
+                ],
+              },
+              {
+                constraint: Operator.all,
+                percentage: 100,
+                segmentType: SegmentType.everyoneElse,
+                userConstraints: [],
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    const client = new MolassesClient({
+      APIKey: "testapikey",
+      sendEvents: true,
+    })
+    client.init().then(() => {
+      expect(client.isActive("FOO_TEST", user)).toBeTruthy()
+      expect(
+        client.isActive("FOO_TEST", { id: "123", params: { isScaredUser: "true" } }),
+      ).toBeFalsy()
+      // Fast-forward until all timers have been executed
+      jest.advanceTimersByTime(200)
+      expect(mockAxios.post).toBeCalledWith(
+        "/analytics",
+        {
+          event: "experiment_started",
+          featureId: undefined,
+          featureName: "FOO_TEST",
+          tags: '{"isScaredUser":"false"}',
+          testType: "experiment",
+          userId: "123",
+        },
+        { headers: { Authorization: "Bearer testapikey" } },
+      )
+      client.experimentSuccess(
+        "FOO_TEST",
+        {
+          test: "123",
+        },
+        user,
+      )
+
+      client.experimentSuccess(
+        "FOO_TEST",
+        {
+          test: "123",
+        },
+        { id: "123", params: { isScaredUser: "true" } },
+      )
+      done()
+    })
+    expect(mockAxios.get).toBeCalledWith("/get-features", {
+      headers: { Authorization: "Bearer testapikey" },
+    })
+
     mockAxios.mockResponse({ data: response })
   })
 })

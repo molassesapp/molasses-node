@@ -11,6 +11,8 @@ export type Options = {
   debug?: boolean
   /** Whether to send user event data back for reporting */
   sendEvents?: boolean
+
+  refreshInterval?: number
 }
 
 type EventOptions = {
@@ -28,6 +30,7 @@ export class MolassesClient {
     URL: "https://us-central1-molasses-36bff.cloudfunctions.net",
     debug: false,
     sendEvents: true,
+    refreshInterval: 15000,
   }
 
   private featuresCache: {
@@ -37,7 +40,6 @@ export class MolassesClient {
   private initiated: boolean = false
   private etag: string = ""
   private axios?: AxiosInstance
-  private refreshInterval = 15000 // 15 seconds
   private timer: NodeJS.Timer | undefined
   /**
    * Creates a new MolassesClient.
@@ -64,7 +66,7 @@ export class MolassesClient {
   }
 
   private timedFetch() {
-    this.timer = setTimeout(() => this.fetchFeatures(), this.refreshInterval)
+    this.timer = setTimeout(() => this.fetchFeatures(), this.options.refreshInterval)
   }
 
   /** Stops any polling by the molasses client */

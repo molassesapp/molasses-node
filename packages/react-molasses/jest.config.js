@@ -3,8 +3,8 @@ const base = require("../../jest.config.base.js")
 
 module.exports = {
   ...base,
-  name: "common",
-  displayName: "MolassesCommon",
+  name: "react",
+  displayName: "ReactMolasses",
   collectCoverageFrom: ["src/**/*.{ts,tsx}"],
-  rootDir: ".",
+  rootDir: "../..",
 }

@@ -6,7 +6,8 @@
     "paths": {
       "@molassesapp/common": ["common/src"],
       "@molassesapp/molasses-server": ["molasses-server/src"],
-      "@molassesapp/molasses-js": ["molasses-js/src"]
+      "@molassesapp/molasses-js": ["molasses-js/src"],
+      "@molassesapp/react-molasses": ["react-molasses/src"]
     }
   }
 }
