@@ -4,6 +4,7 @@ module.exports = {
   ...base,
   projects: ["<rootDir>/packages/*/jest.config.js"],
   coverageDirectory: "<rootDir>/coverage/",
+  collectCoverage: true,
   preset: "ts-jest",
   globals: {
     "ts-jest": {

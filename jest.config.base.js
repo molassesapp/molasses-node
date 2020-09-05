@@ -17,5 +17,5 @@ module.exports = {
     "@molassesapp/molassesjs": "<rootDir>/packages/molasses-js/src/index",
   },
   testEnvironment: "node",
-  coverageReporters: ["text", "html"],
+  coverageReporters: ["json", "lcov", "text", "html"],
 }
