@@ -1,9 +1,9 @@
 <p align="center">
 <img src="https://raw.githubusercontent.com/molassesapp/molasses-go/main/logo.png" style="margin: 0px auto;" width="200"/></p>
 
-<h1 align="center">Molasses Node</h1>
+<h1 align="center">Molasses Node SDK</h1>
 
-> Molasses Node SDK
+[![codecov](https://codecov.io/gh/molassesapp/molasses-node/branch/main/graph/badge.svg)](https://codecov.io/gh/molassesapp/molasses-node) ![Build status](https://github.com/molassesapp/molasses-node/workflows/Node.js%20CI/badge.svg)
 
 It includes the Node (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
 
@@ -25,7 +25,7 @@ import { MolassesClient } from "@molassesapp/molasses-server"
 const { MolassesClient } = require("@molassesapp/molasses-server")
 ```
 
-Using it:
+Start by initializing the client with an `APIKey`. This begins the polling for any feature updates. The updates happen every 15 seconds. This can be overriden with the `refreshInterval` field. If you decide not to track analytics events (experiment started, experiment success) you can turn them off by setting the `sendEvents` field to `false`
 
 ```js
 // Initialize with your API Key
@@ -35,7 +35,13 @@ const client = new MolassesClient({
 
 // Then init which is a promise
 await client.init()
+```
 
+### Check if feature is active
+
+You can call `isActive` with the key name and optionally a user's information. The ID field is used to determine whether a user is part of a percentage of users and uniquely identies a user. If you have other user segments based on user parameterss you can pass those in the `params` field.
+
+```js
 // Once initialized you can start calling isActive
 client.isActive("FOO_TEST", {
   id: "123",
@@ -45,9 +51,51 @@ client.isActive("FOO_TEST", {
 })
 ```
 
-`isActive` can be called in two different ways
+You can check if a feature is active for a user who is anonymous by just calling `isActive` with the key. You won't be able to do percentage roll outs or track that user's behavior.
+
+```js
+client.isActive("FOO_TEST")
+```
+
+### Experiments
+
+To track whether an experiment was successful you can call `ExperimentSuccess`. ExperimentSuccess takes the feature's name, the molasses User and any additional parameters for the event.
+
+```js
+client.ExperimentSuccess(
+  "GOOGLE_SSO",
+  {
+    id: "baz",
+    params: {
+      teamId: "12356",
+    },
+  },
+  {
+    version: "v2.3.0",
+  },
+)
+```
 
 ---
+
+## Methods
+
+### `new MolassesClient(options)`
+
+Creates a new Molasses client. It takes a set of options.
+
+#### Options
+
+| Field             | Required | Type      | Description                                                                     |
+| ----------------- | -------- | --------- | ------------------------------------------------------------------------------- |
+| `apiKey`          | required | `string`  | The API Key for the current environment                                         |
+| `URL`             | optional | `string`  | the base URL for Molasses                                                       |
+| `sendEvents`      | optional | `boolean` | Whether to send analytic events back to Molasses. Defaults to `true`.           |
+| `refreshInterval` | optional | `number`  | How often Molasses should fetch the updated configuration. Defaults to `15000`, |
+
+### `init()`
+
+Fetches configuration of features and begins polling
 
 ### `isActive(featureKey: string)`
 
@@ -56,3 +104,11 @@ Will check if feature is active for ALL users
 ### `isActive(featureKey: string, user: User)`
 
 Will check if the feature is active for this particular based on the segment they are in.
+
+### `experimentSuccess(featureKey: string, additionalInformation: string[string], user: User)`
+
+Will send an event success message when a user completes a set goal. This includes, whether user was in the experimental group (control or experiment), the experiment that was being tested and other metadata. If you want to include additional metadata use the `additionalInformation` argument.
+
+### `stop()`
+
+Stops polling

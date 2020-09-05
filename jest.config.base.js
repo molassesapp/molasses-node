@@ -14,7 +14,7 @@ module.exports = {
 
   moduleNameMapper: {
     "@molassesapp/common": "<rootDir>/packages/common/src/common",
-    "@molassesapp/molassesjs": "<rootDir>/packages/molasses-js/src/index",
+    "@molassesapp/molasses-js": "<rootDir>/packages/molasses-js/src/index",
   },
   testEnvironment: "node",
   coverageReporters: ["json", "lcov", "text", "html"],

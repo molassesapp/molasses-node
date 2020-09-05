@@ -43,7 +43,7 @@ export class MolassesClient {
   private timer: NodeJS.Timer | undefined
   /**
    * Creates a new MolassesClient.
-   * @param  Options options - the settings for the MolassesClient
+   * @param  {Options} options - the settings for the MolassesClient
    */
   constructor(options: Options) {
     this.options = { ...this.options, ...options }
@@ -78,8 +78,8 @@ export class MolassesClient {
    * Checks to see if a feature is active for a user.
    * A `User` is optional. If no user is passed, it will check if the feature is fully available for a user.
    * However, if no user is passed and the identify call is in place it will use that user to evaluate
-   * @param string key  - the name of the feature flag
-   * @param User? user - The user that the feature flag will be evaluated against.
+   * @param {string} key  - the name of the feature flag
+   * @param {User} user - The user that the feature flag will be evaluated against.
    */
   isActive(key: string, user?: User) {
     if (!this.initiated) {
@@ -101,6 +101,12 @@ export class MolassesClient {
     return result
   }
 
+  /**
+   * Sends a success event when a user completes the goal of an A/B test. This can include additional metadata.
+   * @param {string} key  - the name of the feature flag
+   * @param {Object} additionalDetails - additonal metadata for the event
+   * @param {User} [user] - The user that the feature flag will be evaluated against.
+   */
   experimentSuccess(key: string, additionalDetails: { [key: string]: string }, user: User) {
     if (!this.initiated || !this.options.sendEvents || !user || !user.id) {
       return false
