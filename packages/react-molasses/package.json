@@ -40,7 +40,7 @@
     "url": "https://github.com/molassesapp/molasses-node/issues"
   },
   "peerDependencies": {
-    "@molassesapp/molasses-js": "^0.3.2",
+    "@molassesapp/molasses-js": "^0.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
