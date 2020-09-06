@@ -11,9 +11,9 @@ It includes the React (with TypeScript support) SDK for Molasses. It allows you 
 
 ## Install
 
-`npm install @molassesapp/molasses-js @molassesapp/react-molasses`
+`npm install @molassesapp/molasses-js react-molasses`
 
-`yarn add @molassesapp/molasses-js @molassesapp/react-molasses`
+`yarn add @molassesapp/molasses-js react-molasses`
 
 ## Usage
 
@@ -21,7 +21,7 @@ To Require:
 
 ```js
 import { MolassesClient } from "@molassesapp/molasses-js"
-import { MolassesProvider } from "@molassesapp/react-molasses"
+import { MolassesProvider } from "react-molasses"
 ```
 
 Initialize the same way you would with `molasses-js`, but wrap your main application in the `MolassesProvider`
