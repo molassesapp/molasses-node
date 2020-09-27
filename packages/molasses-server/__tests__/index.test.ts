@@ -178,7 +178,8 @@ describe("@molassesapp/molasses-server", () => {
 
         expect(client.isActive("FOO_TEST")).toBeTruthy()
         expect(client.isActive("FOO_FALSE_TEST")).toBeFalsy()
-        expect(client.isActive("FOO_50_PERCENT_TEST", { id: "123", params: {} })).toBeFalsy()
+        expect(client.isActive("FOO_50_PERCENT_TEST", { id: "123", params: {} })).toBeTruthy()
+        expect(client.isActive("FOO_50_PERCENT_TEST", { id: "1234", params: {} })).toBeFalsy()
         expect(client.isActive("FOO_0_PERCENT_TEST", { id: "123", params: {} })).toBeFalsy()
         done()
       })

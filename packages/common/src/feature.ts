@@ -1,4 +1,4 @@
-import { str } from "crc-32"
+const { crc32 } = require("crc")
 export interface Feature {
   id?: string
   key: string
@@ -57,7 +57,7 @@ export const getUserPercentage = (id: string, percentage: number) => {
   if (percentage === 0) {
     return false
   }
-  const c = str(id)
+  const c = crc32(id)
   const v = Math.abs(c % 100.0)
   return v < percentage
 }

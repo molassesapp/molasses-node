@@ -125,8 +125,8 @@ describe("react-molasses", () => {
           </MolassesProvider>,
           {},
         )
-        expect(screen.queryByText(/active/i)).not.toBeInTheDocument()
-        expect(screen.queryByText(/off/i)).toBeInTheDocument()
+        expect(screen.queryByText(/active/i)).toBeInTheDocument()
+        expect(screen.queryByText(/off/i)).not.toBeInTheDocument()
 
         done()
       })
