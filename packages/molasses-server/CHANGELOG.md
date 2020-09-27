@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/molassesapp/molasses-node/compare/v0.4.1...v0.4.2) (2020-09-27)
+
+
+### Bug Fixes
+
+* should use better crc32 hash package ([2b830ad](https://github.com/molassesapp/molasses-node/commit/2b830ad5461811eeb86074ff3ea746e706ddd7af))
+
+
+
+
+
 ## [0.4.1](https://github.com/molassesapp/molasses-node/compare/v0.4.0...v0.4.1) (2020-09-06)
 
 
