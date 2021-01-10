@@ -7,6 +7,7 @@ export type Options = {
   APIKey: string
   /** The based url to be used to call Molasses  */
   URL?: string
+  featuresURL?: string
   /** When set to true it starts debug mode */
   debug?: boolean
   /** Whether to send user event data back for reporting. Defaults to true */
@@ -28,6 +29,7 @@ export class MolassesClient {
   private options: Options = {
     APIKey: "",
     URL: "https://us-central1-molasses-36bff.cloudfunctions.net",
+    featuresURL: "https://www.molasses.app/v1/sdk",
     debug: false,
     sendEvents: true,
   }
@@ -96,6 +98,10 @@ export class MolassesClient {
     }
 
     const feature = this.featuresCache[key]
+    if (!feature) {
+      console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
+      return false
+    }
     const result = isActive(feature, user)
     if (user && this.options.sendEvents) {
       this.uploadEvent({
@@ -127,6 +133,10 @@ export class MolassesClient {
 
     if (user && key != "") {
       const feature = this.featuresCache[key]
+      if (!feature) {
+        console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
+        return false
+      }
       const result = isActive(feature, user)
       this.uploadEvent({
         event: "experiment_success",
@@ -155,10 +165,11 @@ export class MolassesClient {
 
   private fetchFeatures() {
     const headers = { Authorization: "Bearer " + this.options.APIKey }
-    return this.axios
-      .get("/get-features", {
-        headers,
-      })
+    return this.axios({
+      url: "/features",
+      baseURL: this.options.featuresURL,
+      headers,
+    })
       .then((response: AxiosResponse) => {
         if (response.data && response.data.data && response.data.data.features) {
           const jsonData: Feature[] = response.data.data.features
@@ -174,7 +185,10 @@ export class MolassesClient {
         return true
       })
       .catch((err: Error) => {
-        throw new Error("Molasses - " + err.message)
+        if (!this.initiated) {
+          throw new Error("Molasses - " + err.message)
+        }
+        console.error("Molasses - " + err.message)
       })
   }
 }

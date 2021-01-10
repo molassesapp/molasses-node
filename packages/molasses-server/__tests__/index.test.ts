@@ -169,6 +169,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -186,7 +187,9 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })
@@ -196,6 +199,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     expect(client.isActive("FOO_TEST")).toBeFalsy()
     expect(client.isActive("FOO_OFF_TEST")).toBeFalsy()
@@ -206,6 +210,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -246,7 +251,10 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })
@@ -256,6 +264,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -296,7 +305,9 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: responseB })
@@ -367,6 +378,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -426,7 +438,9 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: responseC })
@@ -437,13 +451,17 @@ describe("@molassesapp/molasses-server", () => {
       APIKey: "testapikey",
       sendEvents: false,
       refreshInterval: 100,
+      streaming: false,
     })
     client
       .init()
       .then(() => {
         expect(client.isActive("FOO_TEST")).toBeTruthy()
         jest.runAllTimers()
-        expect(mockAxios.get).toBeCalledWith("/get-features", {
+
+        expect(mockAxios).toBeCalledWith({
+          url: "/features",
+          baseURL: "https://www.molasses.app/v1/sdk",
           headers: { Authorization: "Bearer testapikey", "If-None-Match": "yo" },
         })
         done()
@@ -451,7 +469,9 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response, headers: { etag: "yo" } })
@@ -462,11 +482,14 @@ describe("@molassesapp/molasses-server", () => {
       APIKey: "testapikey",
       sendEvents: false,
       refreshInterval: 100,
+      streaming: false,
     })
     client.init().catch((reason) => {
       done()
     })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockError(new Error("fail"))
@@ -522,6 +545,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: true,
+      streaming: false,
     })
     client.init().then(() => {
       expect(client.isActive("FOO_TEST", user)).toBeTruthy()
@@ -559,7 +583,9 @@ describe("@molassesapp/molasses-server", () => {
       )
       done()
     })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
 

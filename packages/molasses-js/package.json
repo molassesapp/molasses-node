@@ -23,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@molassesapp/common": "^0.4.2",
-    "axios": "^0.20.0"
+    "axios": "^0.21.1"
   },
   "gitHead": "939c3bb0e2d390ded7d422ade06e355b09ccf667",
   "devDependencies": {

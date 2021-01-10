@@ -102,7 +102,9 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
   })
@@ -134,7 +136,9 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
   })
@@ -168,7 +172,9 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
   })
@@ -202,7 +208,9 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios).toBeCalledWith({
+      url: "/features",
+      baseURL: "https://www.molasses.app/v1/sdk",
       headers: { Authorization: "Bearer testapikey" },
     })
   })
