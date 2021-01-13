@@ -8,7 +8,6 @@ export type Options = {
   APIKey: string
   /** The based url to be used to call Molasses  */
   URL?: string
-  featuresURL?: string
   /** When set to true it starts debug mode */
   debug?: boolean
   /** Whether to send user event data back for reporting */
@@ -31,8 +30,7 @@ type EventOptions = {
 export class MolassesClient {
   private options: Options = {
     APIKey: "",
-    URL: "https://us-central1-molasses-36bff.cloudfunctions.net",
-    featuresURL: "https://www.molasses.app/v1/sdk",
+    URL: "https://sdk.molasses.app/v1",
     debug: false,
     sendEvents: true,
     streaming: true,
@@ -101,7 +99,7 @@ export class MolassesClient {
   setupEventSource() {
     return new Promise((resolve, reject) => {
       const headers = { Authorization: "Bearer " + this.options.APIKey }
-      this.eventStream = new EventSource(this.options.featuresURL + "/event-stream", {
+      this.eventStream = new EventSource(this.options.URL + "/event-stream", {
         headers,
       } as any)
 
@@ -241,11 +239,10 @@ export class MolassesClient {
     if (this.etag) {
       headers["If-None-Match"] = this.etag
     }
-    return this.axios({
-      url: "/features",
-      baseURL: this.options.featuresURL,
-      headers,
-    })
+    return this.axios
+      .get("/features", {
+        headers,
+      })
       .then((response: AxiosResponse) => {
         this.timedFetch()
         if (response.status == 304) {

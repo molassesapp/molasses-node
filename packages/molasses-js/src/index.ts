@@ -29,7 +29,7 @@ export class MolassesClient {
   private options: Options = {
     APIKey: "",
     URL: "https://us-central1-molasses-36bff.cloudfunctions.net",
-    featuresURL: "https://www.molasses.app/v1/sdk",
+    featuresURL: "https://sdk.molasses.app/v1",
     debug: false,
     sendEvents: true,
   }
