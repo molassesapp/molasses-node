@@ -7,7 +7,6 @@ export type Options = {
   APIKey: string
   /** The based url to be used to call Molasses  */
   URL?: string
-  featuresURL?: string
   /** When set to true it starts debug mode */
   debug?: boolean
   /** Whether to send user event data back for reporting. Defaults to true */
@@ -28,8 +27,7 @@ type EventOptions = {
 export class MolassesClient {
   private options: Options = {
     APIKey: "",
-    URL: "https://us-central1-molasses-36bff.cloudfunctions.net",
-    featuresURL: "https://sdk.molasses.app/v1",
+    URL: "https://sdk.molasses.app/v1",
     debug: false,
     sendEvents: true,
   }
@@ -165,11 +163,10 @@ export class MolassesClient {
 
   private fetchFeatures() {
     const headers = { Authorization: "Bearer " + this.options.APIKey }
-    return this.axios({
-      url: "/features",
-      baseURL: this.options.featuresURL,
-      headers,
-    })
+    return this.axios
+      .get("/features", {
+        headers,
+      })
       .then((response: AxiosResponse) => {
         if (response.data && response.data.data && response.data.data.features) {
           const jsonData: Feature[] = response.data.data.features
