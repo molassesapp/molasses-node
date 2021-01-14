@@ -102,7 +102,7 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
   })
@@ -134,7 +134,7 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
   })
@@ -168,7 +168,7 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
   })
@@ -202,7 +202,7 @@ describe("react-molasses", () => {
         console.error(err)
       })
     mockAxios.mockResponse({ data: response })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
   })

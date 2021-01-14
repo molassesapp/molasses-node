@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { MolassesClient } from "../src"
 import mockAxios from "jest-mock-axios"
 import { Feature, SegmentType, Operator } from "@molassesapp/common"
@@ -91,12 +94,14 @@ describe("@molassesapp/molasses-js", () => {
         expect(client.isActive("FOO_50_PERCENT_TEST", { id: "123", params: {} })).toBeTruthy()
         expect(client.isActive("FOO_50_PERCENT_TEST", { id: "1234", params: {} })).toBeFalsy()
         expect(client.isActive("FOO_0_PERCENT_TEST", { id: "123", params: {} })).toBeFalsy()
+        expect(client.isActive("NON_EXISTENT", { id: "123", params: {} })).toBeFalsy()
+        expect(client.isActive("NON_EXISTENT", { id: "123", params: {} }, true)).toBeTruthy()
         done()
       })
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })
@@ -181,7 +186,7 @@ describe("@molassesapp/molasses-js", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })
@@ -201,12 +206,11 @@ describe("@molassesapp/molasses-js", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
-      refreshInterval: 100,
     })
     client.init().catch((reason) => {
       done()
     })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockError(new Error("fail"))
@@ -297,9 +301,17 @@ describe("@molassesapp/molasses-js", () => {
         },
         { id: "123", params: { isScaredUser: "true" } },
       )
+
+      client.experimentSuccess("NON_EXISTENT", null)
+
+      client.experimentSuccess("NON_EXISTENT", null, {
+        id: "123",
+        params: { isScaredUser: "true" },
+      })
+
       done()
     })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
 

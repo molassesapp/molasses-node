@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { MolassesClient } from "../src"
 import mockAxios from "jest-mock-axios"
 import { Feature, SegmentType, Operator } from "@molassesapp/common"
@@ -8,6 +11,8 @@ const user = {
   },
 }
 
+jest.mock("eventsource")
+const { sources } = require("eventsourcemock")
 const response: {
   data: { features: Feature[] }
 } = {
@@ -99,6 +104,12 @@ const responseB: {
     ],
   },
 }
+const validMessage = new MessageEvent("foo", {
+  data: JSON.stringify(response),
+})
+const validMessageB = new MessageEvent("foo", {
+  data: JSON.stringify(responseB),
+})
 
 describe("@molassesapp/molasses-server", () => {
   beforeEach(() => {
@@ -169,6 +180,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -186,7 +198,7 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })
@@ -196,6 +208,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     expect(client.isActive("FOO_TEST")).toBeFalsy()
     expect(client.isActive("FOO_OFF_TEST")).toBeFalsy()
@@ -206,6 +219,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -246,7 +260,8 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response })
@@ -256,6 +271,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -291,12 +307,15 @@ describe("@molassesapp/molasses-server", () => {
             },
           }),
         ).toBeTruthy()
+        expect(client.isActive("NON_EXISTENT", { id: "123", params: {} })).toBeFalsy()
+        expect(client.isActive("NON_EXISTENT", { id: "123", params: {} }, true)).toBeTruthy()
+
         done()
       })
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: responseB })
@@ -367,6 +386,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: false,
+      streaming: false,
     })
     client
       .init()
@@ -426,7 +446,7 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: responseC })
@@ -437,13 +457,15 @@ describe("@molassesapp/molasses-server", () => {
       APIKey: "testapikey",
       sendEvents: false,
       refreshInterval: 100,
+      streaming: false,
     })
     client
       .init()
       .then(() => {
         expect(client.isActive("FOO_TEST")).toBeTruthy()
         jest.runAllTimers()
-        expect(mockAxios.get).toBeCalledWith("/get-features", {
+
+        expect(mockAxios.get).toBeCalledWith("/features", {
           headers: { Authorization: "Bearer testapikey", "If-None-Match": "yo" },
         })
         done()
@@ -451,7 +473,7 @@ describe("@molassesapp/molasses-server", () => {
       .catch((reason) => {
         console.error(reason)
       })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockResponse({ data: response, headers: { etag: "yo" } })
@@ -462,11 +484,12 @@ describe("@molassesapp/molasses-server", () => {
       APIKey: "testapikey",
       sendEvents: false,
       refreshInterval: 100,
+      streaming: false,
     })
     client.init().catch((reason) => {
       done()
     })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
     mockAxios.mockError(new Error("fail"))
@@ -522,6 +545,7 @@ describe("@molassesapp/molasses-server", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
       sendEvents: true,
+      streaming: false,
     })
     client.init().then(() => {
       expect(client.isActive("FOO_TEST", user)).toBeTruthy()
@@ -557,12 +581,48 @@ describe("@molassesapp/molasses-server", () => {
         },
         { id: "123", params: { isScaredUser: "true" } },
       )
+      client.experimentSuccess("NON_EXISTENT", null, {
+        id: "123",
+        params: { isScaredUser: "true" },
+      })
+
+      client.experimentSuccess("NON_EXISTENT", null, {
+        id: "123",
+        params: { isScaredUser: "true" },
+      })
       done()
     })
-    expect(mockAxios.get).toBeCalledWith("/get-features", {
+    expect(mockAxios.get).toBeCalledWith("/features", {
       headers: { Authorization: "Bearer testapikey" },
     })
 
     mockAxios.mockResponse({ data: response })
+  })
+
+  it("should handle streaming", (done) => {
+    const client = new MolassesClient({
+      APIKey: "testapikey",
+      sendEvents: false,
+      streaming: true,
+    })
+
+    client
+      .init()
+      .then(() => {
+        console.log("hi james")
+        done()
+      })
+      .catch((err) => {
+        console.error(err)
+        done()
+      })
+    sources["https://sdk.molasses.app/v1/event-stream"].emitOpen()
+    sources["https://sdk.molasses.app/v1/event-stream"].emitMessage(validMessage)
+    const err = new Error("unauthorized") as any
+    err.status = 401
+    sources["https://sdk.molasses.app/v1/event-stream"].emitError(err)
+    const othererror = new Error("i'm done dude") as any
+    othererror.status = 503
+    sources["https://sdk.molasses.app/v1/event-stream"].emitError(othererror)
   })
 })

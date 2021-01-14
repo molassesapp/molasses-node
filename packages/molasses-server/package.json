@@ -18,7 +18,9 @@
   "license": "MIT",
   "dependencies": {
     "@molassesapp/common": "^0.4.2",
-    "axios": "^0.20.0"
+    "axios": "^0.21.1",
+    "eventsource": "^1.0.7",
+    "winston": "^3.3.3"
   },
   "publishConfig": {
     "access": "public"

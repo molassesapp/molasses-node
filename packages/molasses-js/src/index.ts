@@ -27,7 +27,7 @@ type EventOptions = {
 export class MolassesClient {
   private options: Options = {
     APIKey: "",
-    URL: "https://us-central1-molasses-36bff.cloudfunctions.net",
+    URL: "https://sdk.molasses.app/v1",
     debug: false,
     sendEvents: true,
   }
@@ -85,8 +85,9 @@ export class MolassesClient {
    * However, if no user is passed and the identify call is in place it will use that user to evaluate
    * @param {string} key  - the name of the feature flag
    * @param {User} [user] - The user that the feature flag will be evaluated against.
+   * @param {Bool} [defaultValue] - The default value incase the feature is not available
    */
-  isActive(key: string, user?: User) {
+  isActive(key: string, user?: User, defaultValue = false) {
     if (!this.initiated) {
       return false
     }
@@ -96,6 +97,10 @@ export class MolassesClient {
     }
 
     const feature = this.featuresCache[key]
+    if (!feature) {
+      console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
+      return defaultValue
+    }
     const result = isActive(feature, user)
     if (user && this.options.sendEvents) {
       this.uploadEvent({
@@ -127,6 +132,10 @@ export class MolassesClient {
 
     if (user && key != "") {
       const feature = this.featuresCache[key]
+      if (!feature) {
+        console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
+        return false
+      }
       const result = isActive(feature, user)
       this.uploadEvent({
         event: "experiment_success",
@@ -156,7 +165,7 @@ export class MolassesClient {
   private fetchFeatures() {
     const headers = { Authorization: "Bearer " + this.options.APIKey }
     return this.axios
-      .get("/get-features", {
+      .get("/features", {
         headers,
       })
       .then((response: AxiosResponse) => {
@@ -174,7 +183,10 @@ export class MolassesClient {
         return true
       })
       .catch((err: Error) => {
-        throw new Error("Molasses - " + err.message)
+        if (!this.initiated) {
+          throw new Error("Molasses - " + err.message)
+        }
+        console.error("Molasses - " + err.message)
       })
   }
 }

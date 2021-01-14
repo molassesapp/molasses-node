@@ -1,47 +1,49 @@
 {
-  "name": "molasses-node",
-  "version": "0.1.2",
-  "description": "A Node (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.",
-  "main": "index.js",
-  "scripts": {
-    "build": "lerna run build",
-    "test": "jest",
-    "version": "lerna version"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/molassesapp/molasses-node.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/molassesapp/molasses-node/issues"
-  },
-  "homepage": "https://github.com/molassesapp/molasses-node#readme",
-  "devDependencies": {
-    "@babel/core": "^7.11.5",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/preset-env": "^7.11.5",
-    "@babel/preset-react": "^7.10.4",
-    "@babel/preset-typescript": "^7.10.4",
-    "@types/jest": "^26.0.12",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
-    "babel-jest": "^26.3.0",
-    "eslint": "^7.8.1",
-    "jest": "^26.4.2",
-    "jest-mock-axios": "^4.2.1",
-    "lerna": "^3.22.1",
-    "prettier": "^2.1.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "ts-jest": "^26.3.0",
-    "typescript": "^4.0.2"
-  },
-  "dependencies": {
-    "axios": "^0.20.0",
-    "axios-retry": "^3.1.8",
-    "core-js": "^3.6.5",
-    "express": "^4.17.1"
-  }
+	"name": "molasses-node",
+	"version": "0.1.2",
+	"description": "A Node (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.",
+	"main": "index.js",
+	"scripts": {
+		"build": "lerna run build",
+		"test": "jest",
+		"version": "lerna version"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/molassesapp/molasses-node.git"
+	},
+	"author": "",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/molassesapp/molasses-node/issues"
+	},
+	"homepage": "https://github.com/molassesapp/molasses-node#readme",
+	"devDependencies": {
+		"@babel/core": "^7.11.5",
+		"@babel/plugin-proposal-class-properties": "^7.10.4",
+		"@babel/preset-env": "^7.11.5",
+		"@babel/preset-react": "^7.10.4",
+		"@babel/preset-typescript": "^7.10.4",
+		"@types/jest": "^26.0.12",
+		"@typescript-eslint/eslint-plugin": "^4.0.1",
+		"@typescript-eslint/parser": "^4.0.1",
+		"babel-jest": "^26.3.0",
+		"eslint": "^7.8.1",
+		"eventsourcemock": "^2.0.0",
+		"jest": "^26.4.2",
+		"jest-mock-axios": "^4.2.1",
+		"lerna": "^3.22.1",
+		"mocksse": "^1.0.2",
+		"prettier": "^2.1.1",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"ts-jest": "^26.3.0",
+		"typescript": "^4.0.2"
+	},
+	"dependencies": {
+		"axios": "^0.21.1",
+		"axios-retry": "^3.1.8",
+		"core-js": "^3.6.5",
+		"express": "^4.17.1"
+	}
 }

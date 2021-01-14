@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { getUserPercentage } from "../src/common"
 
 describe("@molassesapp/common", () => {
