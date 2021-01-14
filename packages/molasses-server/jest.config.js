@@ -7,4 +7,5 @@ module.exports = {
   displayName: "MolassesServer",
   collectCoverageFrom: ["src/**/*.{ts,tsx}"],
   rootDir: "../..",
+  setupFiles: ["./packages/molasses-server/__tests__/setupFiles"],
 }

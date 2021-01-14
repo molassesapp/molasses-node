@@ -104,20 +104,26 @@ export class MolassesClient {
       } as any)
 
       this.eventStream.onmessage = (e) => {
-        const result = JSON.parse(e.data)
-        if (result.data?.features) {
-          this.logger.info("received feature update")
-          const jsonData: Feature[] = result.data.features
-          this.featuresCache = jsonData.reduce<{ [key: string]: Feature }>(
-            (acc, value: Feature) => {
-              acc[value.key] = value
-              return acc
-            },
-            {},
-          )
-          this.initiated = true
-          this.retryCount = 0
-          resolve(void 0)
+        try {
+          const result = JSON.parse(e.data)
+          if (result.data?.features) {
+            this.logger.info("received feature update")
+            const jsonData: Feature[] = result.data.features
+            this.featuresCache = jsonData.reduce<{ [key: string]: Feature }>(
+              (acc, value: Feature) => {
+                acc[value.key] = value
+                return acc
+              },
+              {},
+            )
+            this.initiated = true
+            this.retryCount = 0
+            resolve(void 0)
+          } else {
+            reject("Molasses - invalid message format")
+          }
+        } catch (error) {
+          reject("Molasses - invalid message format")
         }
       }
       this.eventStream.onerror = (err: any) => {
@@ -165,7 +171,7 @@ export class MolassesClient {
    * @param {string} key  - the name of the feature flag
    * @param {User} user - The user that the feature flag will be evaluated against.
    */
-  isActive(key: string, user?: User) {
+  isActive(key: string, user?: User, defaultValue = false) {
     if (!this.initiated) {
       return false
     }
@@ -173,7 +179,7 @@ export class MolassesClient {
     const feature = this.featuresCache[key]
     if (!feature) {
       this.logger.warn(`Molasses - feature ${key} doesn't exist in your environment`)
-      return false
+      return defaultValue
     }
     const result = isActive(feature, user)
     if (user && this.options.sendEvents) {

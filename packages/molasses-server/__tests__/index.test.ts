@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { MolassesClient } from "../src"
 import mockAxios from "jest-mock-axios"
 import { Feature, SegmentType, Operator } from "@molassesapp/common"
@@ -8,6 +11,8 @@ const user = {
   },
 }
 
+jest.mock("eventsource")
+const { sources } = require("eventsourcemock")
 const response: {
   data: { features: Feature[] }
 } = {
@@ -99,6 +104,12 @@ const responseB: {
     ],
   },
 }
+const validMessage = new MessageEvent("foo", {
+  data: JSON.stringify(response),
+})
+const validMessageB = new MessageEvent("foo", {
+  data: JSON.stringify(responseB),
+})
 
 describe("@molassesapp/molasses-server", () => {
   beforeEach(() => {
@@ -296,6 +307,9 @@ describe("@molassesapp/molasses-server", () => {
             },
           }),
         ).toBeTruthy()
+        expect(client.isActive("NON_EXISTENT", { id: "123", params: {} })).toBeFalsy()
+        expect(client.isActive("NON_EXISTENT", { id: "123", params: {} }, true)).toBeTruthy()
+
         done()
       })
       .catch((reason) => {
@@ -567,6 +581,15 @@ describe("@molassesapp/molasses-server", () => {
         },
         { id: "123", params: { isScaredUser: "true" } },
       )
+      client.experimentSuccess("NON_EXISTENT", null, {
+        id: "123",
+        params: { isScaredUser: "true" },
+      })
+
+      client.experimentSuccess("NON_EXISTENT", null, {
+        id: "123",
+        params: { isScaredUser: "true" },
+      })
       done()
     })
     expect(mockAxios.get).toBeCalledWith("/features", {
@@ -574,5 +597,32 @@ describe("@molassesapp/molasses-server", () => {
     })
 
     mockAxios.mockResponse({ data: response })
+  })
+
+  it("should handle streaming", (done) => {
+    const client = new MolassesClient({
+      APIKey: "testapikey",
+      sendEvents: false,
+      streaming: true,
+    })
+
+    client
+      .init()
+      .then(() => {
+        console.log("hi james")
+        done()
+      })
+      .catch((err) => {
+        console.error(err)
+        done()
+      })
+    sources["https://sdk.molasses.app/v1/event-stream"].emitOpen()
+    sources["https://sdk.molasses.app/v1/event-stream"].emitMessage(validMessage)
+    const err = new Error("unauthorized") as any
+    err.status = 401
+    sources["https://sdk.molasses.app/v1/event-stream"].emitError(err)
+    const othererror = new Error("i'm done dude") as any
+    othererror.status = 503
+    sources["https://sdk.molasses.app/v1/event-stream"].emitError(othererror)
   })
 })

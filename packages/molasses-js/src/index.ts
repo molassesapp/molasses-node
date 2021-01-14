@@ -85,8 +85,9 @@ export class MolassesClient {
    * However, if no user is passed and the identify call is in place it will use that user to evaluate
    * @param {string} key  - the name of the feature flag
    * @param {User} [user] - The user that the feature flag will be evaluated against.
+   * @param {Bool} [defaultValue] - The default value incase the feature is not available
    */
-  isActive(key: string, user?: User) {
+  isActive(key: string, user?: User, defaultValue = false) {
     if (!this.initiated) {
       return false
     }
@@ -98,7 +99,7 @@ export class MolassesClient {
     const feature = this.featuresCache[key]
     if (!feature) {
       console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
-      return false
+      return defaultValue
     }
     const result = isActive(feature, user)
     if (user && this.options.sendEvents) {
