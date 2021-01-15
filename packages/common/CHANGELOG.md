@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/molassesapp/molasses-node/compare/v0.4.2...v0.5.0) (2021-01-15)
+
+
+### Bug Fixes
+
+* fix tests and add better default handling ([958706d](https://github.com/molassesapp/molasses-node/commit/958706d143479a789da3993b19d29757687f05c9))
+
+
+
+
+
 ## [0.4.2](https://github.com/molassesapp/molasses-node/compare/v0.4.1...v0.4.2) (2020-09-27)
 
 
