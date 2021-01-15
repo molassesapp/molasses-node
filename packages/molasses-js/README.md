@@ -7,15 +7,15 @@
 
 [![codecov](https://codecov.io/gh/molassesapp/molasses-node/branch/main/graph/badge.svg)](https://codecov.io/gh/molassesapp/molasses-node) ![Build status](https://github.com/molassesapp/molasses-node/workflows/Node.js%20CI/badge.svg)
 
-It includes the Browser (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
+`Molasses-JS` includes the Browser (with TypeScript support) SDK for Molasses. It allows you to evaluate a user's status for a feature. It also helps simplify logging events for A/B testing.
 
 `Molasses-JS` - Once initialized, it takes microseconds to evaluate if a user is active.
 
 ## Install
 
-`npm install @molassesapp/molasses-server`
+`npm install @molassesapp/molasses-js`
 
-`yarn add @molassesapp/molasses-server`
+`yarn add @molassesapp/molasses-js`
 
 `<script src="https://cdn.jsdelivr.net/npm/@molassesapp/molasses-js@0.4.1/dist/molasses.min.js"></script>`
 
@@ -24,9 +24,9 @@ It includes the Browser (with TypeScript support) SDK for Molasses. It allows yo
 To Require:
 
 ```js
-import { MolassesClient } from "@molassesapp/molasses-server"
+import { MolassesClient } from "@molassesapp/molasses-js"
 // or
-const { MolassesClient } = require("@molassesapp/molasses-server")
+const { MolassesClient } = require("@molassesapp/molasses-js")
 // or if using a script tag
 var MolassesClient = MolassesJS.MolassesClient
 ```

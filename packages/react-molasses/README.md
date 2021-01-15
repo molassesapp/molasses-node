@@ -5,7 +5,7 @@
 
 [![codecov](https://codecov.io/gh/molassesapp/molasses-node/branch/main/graph/badge.svg)](https://codecov.io/gh/molassesapp/molasses-node) ![Build status](https://github.com/molassesapp/molasses-node/workflows/Node.js%20CI/badge.svg)
 
-It includes the React (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
+It includes the React (with TypeScript support) SDK for Molasses. It allows you to evaluate a user's status for a feature. It also helps simplify logging events for A/B testing.
 
 `react-molasses` offers a provider with hooks and `with` support. Once initialized, it takes microseconds to evaluate if a user is active. `react-molasses` does rely on `molasses-js` as a client.
 

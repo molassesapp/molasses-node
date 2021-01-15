@@ -6,13 +6,13 @@
 [![codecov](https://codecov.io/gh/molassesapp/molasses-node/branch/main/graph/badge.svg)](https://codecov.io/gh/molassesapp/molasses-node) ![Build status](https://github.com/molassesapp/molasses-node/workflows/Node.js%20CI/badge.svg)
 
 This is the monorepo for all things JavaScript and Molasses.
-It includes both Node, React, and Browser (with TypeScript support) SDKs for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
+It includes the Node, React, and Browser (with TypeScript support) SDKs for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
 
 ## Packages
 
 ### [molasses-server](https://github.com/molassesapp/molasses-node/tree/main/packages/molasses-server)
 
-Use for any `Node` based environments. Supports both JS and TS. It uses polling to check if you have updated features. Once initialized, it takes microseconds to evaluate if a user is active.
+Use for any `Node` based environments. Supports both JS and TS. It uses SSE to check if you have updated features. Once initialized, it takes microseconds to evaluate if a user is active. With SSE, updates are pushed automatically to the client.
 
 ### [molasses-js](https://github.com/molassesapp/molasses-node/tree/main/packages/molasses-js)
 

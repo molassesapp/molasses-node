@@ -5,9 +5,9 @@
 
 [![codecov](https://codecov.io/gh/molassesapp/molasses-node/branch/main/graph/badge.svg)](https://codecov.io/gh/molassesapp/molasses-node) ![Build status](https://github.com/molassesapp/molasses-node/workflows/Node.js%20CI/badge.svg)
 
-It includes the Node (with TypeScript support) SDK for Molasses. It allows you to evaluate user's status for a feature. It also helps simplify logging events for A/B testing.
+`Molasses-server` includes the Node (with TypeScript support) SDK for Molasses. It allows you to evaluate a user's status for a feature. It also helps simplify logging events for A/B testing.
 
-`Molasses-server` uses polling to check if you have updated features. Once initialized, it takes microseconds to evaluate if a user is active.
+The SDK uses SSE to communicate with the Molasses Application. Once initialized, it takes microseconds to evaluate if a user is active. When you update a feature on Molasses, it sends that update to all of your clients through SSE and users would start experiencing that change instantly.
 
 ## Install
 
