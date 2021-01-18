@@ -123,7 +123,6 @@ describe("@molassesapp/molasses-server", () => {
     try {
       new MolassesClient({
         APIKey: "",
-        sendEvents: false,
       })
     } catch (error) {
       expect(error.message).toEqual("API KEY is required for Molasses to start")
@@ -179,7 +178,6 @@ describe("@molassesapp/molasses-server", () => {
 
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       streaming: false,
     })
     client
@@ -207,7 +205,6 @@ describe("@molassesapp/molasses-server", () => {
   it("calling  before init returns false on actions", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       streaming: false,
     })
     expect(client.isActive("FOO_TEST")).toBeFalsy()
@@ -218,7 +215,6 @@ describe("@molassesapp/molasses-server", () => {
   it("should handle complex user segments", (done) => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       streaming: false,
     })
     client
@@ -270,7 +266,6 @@ describe("@molassesapp/molasses-server", () => {
   it("should handle more complex user segments", (done) => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       streaming: false,
     })
     client
@@ -385,7 +380,6 @@ describe("@molassesapp/molasses-server", () => {
 
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       streaming: false,
     })
     client
@@ -455,7 +449,6 @@ describe("@molassesapp/molasses-server", () => {
   it("should handle refresh", (done) => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       refreshInterval: 100,
       streaming: false,
     })
@@ -482,7 +475,6 @@ describe("@molassesapp/molasses-server", () => {
   it("should handle failures", (done) => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       refreshInterval: 100,
       streaming: false,
     })
@@ -544,7 +536,7 @@ describe("@molassesapp/molasses-server", () => {
 
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: true,
+      autoSendEvents: true,
       streaming: false,
     })
     client.init().then(() => {
@@ -602,7 +594,6 @@ describe("@molassesapp/molasses-server", () => {
   it("should handle streaming", (done) => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
       streaming: true,
     })
 

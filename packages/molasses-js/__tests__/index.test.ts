@@ -24,7 +24,6 @@ describe("@molassesapp/molasses-js", () => {
     try {
       new MolassesClient({
         APIKey: "",
-        sendEvents: false,
       })
     } catch (error) {
       expect(error.message).toEqual("API KEY is required for Molasses to start")
@@ -82,7 +81,6 @@ describe("@molassesapp/molasses-js", () => {
 
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
     })
     client
       .init()
@@ -158,7 +156,6 @@ describe("@molassesapp/molasses-js", () => {
 
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
     })
     client
       .init()
@@ -195,7 +192,6 @@ describe("@molassesapp/molasses-js", () => {
   it("calling  before init returns false on actions", () => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
     })
     expect(client.isActive("FOO_TEST")).toBeFalsy()
     expect(client.isActive("FOO_OFF_TEST")).toBeFalsy()
@@ -205,7 +201,6 @@ describe("@molassesapp/molasses-js", () => {
   it("should handle failures", (done) => {
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: false,
     })
     client.init().catch((reason) => {
       done()
@@ -265,7 +260,7 @@ describe("@molassesapp/molasses-js", () => {
 
     const client = new MolassesClient({
       APIKey: "testapikey",
-      sendEvents: true,
+      autoSendEvents: true,
     })
     client.init().then(() => {
       expect(client.isActive("FOO_TEST", user)).toBeTruthy()

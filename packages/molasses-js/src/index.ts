@@ -10,7 +10,7 @@ export type Options = {
   /** When set to true it starts debug mode */
   debug?: boolean
   /** Whether to send user event data back for reporting. Defaults to true */
-  sendEvents?: boolean
+  autoSendEvents?: boolean
   /** Where to store the feature data -- defaults to `memory`. `localstorage` allows for user backup*/
   storage?: "localstorage" | "memory"
 }
@@ -29,7 +29,7 @@ export class MolassesClient {
     APIKey: "",
     URL: "https://sdk.molasses.app/v1",
     debug: false,
-    sendEvents: true,
+    autoSendEvents: false,
   }
 
   private featuresCache: {
@@ -102,7 +102,7 @@ export class MolassesClient {
       return defaultValue
     }
     const result = isActive(feature, user)
-    if (user && this.options.sendEvents) {
+    if (user && this.options.autoSendEvents) {
       this.uploadEvent({
         event: "experiment_started",
         tags: user.params,
@@ -116,13 +116,49 @@ export class MolassesClient {
   }
 
   /**
+   * Sends a tracking event when a user starts an A/B test. This can include additional metadata.
+   * @param {string} key  - the name of the feature flag
+   * @param {Object} additionalDetails - additonal metadata for the event
+   * @param {User} [user] - The user that the feature flag will be evaluated against.
+   */
+  experimentStarted(key: string, additionalDetails: { [key: string]: string }, user?: User) {
+    if (!this.initiated) {
+      return false
+    }
+
+    if (!user && this.user) {
+      user = this.user
+    }
+
+    if (user && key != "") {
+      const feature = this.featuresCache[key]
+      if (!feature) {
+        console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
+        return false
+      }
+      const result = isActive(feature, user)
+      this.uploadEvent({
+        event: "experiment_started",
+        tags: {
+          ...user.params,
+          ...additionalDetails,
+        },
+        userId: user.id,
+        featureId: feature.id,
+        featureName: key,
+        testType: result ? "experiment" : "control",
+      })
+    }
+  }
+
+  /**
    * Sends a success event when a user completes the goal of an A/B test. This can include additional metadata.
    * @param {string} key  - the name of the feature flag
    * @param {Object} additionalDetails - additonal metadata for the event
    * @param {User} [user] - The user that the feature flag will be evaluated against.
    */
   experimentSuccess(key: string, additionalDetails: { [key: string]: string }, user?: User) {
-    if (!this.initiated || !this.options.sendEvents) {
+    if (!this.initiated) {
       return false
     }
 

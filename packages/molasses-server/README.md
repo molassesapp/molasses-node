@@ -59,6 +59,23 @@ client.isActive("FOO_TEST")
 
 ### Experiments
 
+To track whether an experiment has started you can call `experimentStarted`. experimentStarted takes the feature's name, the molasses User and any additional parameters for the event.
+
+```js
+client.ExperimentSuccess(
+  "GOOGLE_SSO",
+  {
+    id: "baz",
+    params: {
+      teamId: "12356",
+    },
+  },
+  {
+    version: "v2.3.0",
+  },
+)
+```
+
 To track whether an experiment was successful you can call `ExperimentSuccess`. ExperimentSuccess takes the feature's name, the molasses User and any additional parameters for the event.
 
 ```js
@@ -86,12 +103,13 @@ Creates a new Molasses client. It takes a set of options.
 
 #### Options
 
-| Field             | Required | Type      | Description                                                                     |
-| ----------------- | -------- | --------- | ------------------------------------------------------------------------------- |
-| `apiKey`          | required | `string`  | The API Key for the current environment                                         |
-| `URL`             | optional | `string`  | the base URL for Molasses                                                       |
-| `sendEvents`      | optional | `boolean` | Whether to send analytic events back to Molasses. Defaults to `true`.           |
-| `refreshInterval` | optional | `number`  | How often Molasses should fetch the updated configuration. Defaults to `15000`, |
+| Field             | Required | Type      | Description                                                                                 |
+| ----------------- | -------- | --------- | ------------------------------------------------------------------------------------------- |
+| `apiKey`          | required | `string`  | The API Key for the current environment                                                     |
+| `URL`             | optional | `string`  | the base URL for Molasses                                                                   |
+| `autoSendEvents`  | optional | `boolean` | Whether to automatically send analytic events back to Molasses. Defaults to `false`.        |
+| `refreshInterval` | optional | `number`  | If Polling, how often Molasses should fetch the updated configuration. Defaults to `15000`, |
+| `streaming`       | optional | `boolean` | Whether Molasses should use SSE or polling. Defaults to `true`                              |
 
 ### `init()`
 
@@ -104,6 +122,10 @@ Will check if feature is active for ALL users
 ### `isActive(featureKey: string, user: User)`
 
 Will check if the feature is active for this particular based on the segment they are in.
+
+### `experimentStarted(featureKey: string, additionalInformation: string[string], user: User)`
+
+Will send an event started message when a user starts an a/b tests. This includes, whether user was in the experimental group (control or experiment), the experiment that was being tested and other metadata. If you want to include additional metadata use the `additionalInformation` argument.
 
 ### `experimentSuccess(featureKey: string, additionalInformation: string[string], user: User)`
 
