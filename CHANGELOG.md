@@ -5,6 +5,10 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.5.0](https://github.com/molassesapp/molasses-node/compare/v0.4.2...v0.5.0) (2021-01-15)
 
+### Features
+
+* Adds support for SSE on `molasses-node`. This is now the default.
+* Sets all URLs to https://sdk.molasses.app
 
 ### Bug Fixes
 
