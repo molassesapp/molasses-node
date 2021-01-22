@@ -40,7 +40,6 @@
     "url": "https://github.com/molassesapp/molasses-node/issues"
   },
   "peerDependencies": {
-    "@molassesapp/molasses-js": "^0.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
@@ -51,6 +50,10 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.0",
-    "@types/react": "^16.9.49"
+    "@types/react": "^16.9.49",
+    "babel-loader": "^8.1.0",
+    "ts-loader": "^8.0.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   }
 }
