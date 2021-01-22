@@ -1,6 +1,6 @@
 {
   "name": "react-molasses",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "React package for interacting with Molasses' API",
   "keywords": [
     "molasses",

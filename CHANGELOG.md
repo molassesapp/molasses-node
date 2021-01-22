@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/molassesapp/molasses-node/compare/v0.6.0...v0.6.1) (2021-01-22)
+
+
+### Bug Fixes
+
+* React molasses build so it outputs typescript definitions ([92631d2](https://github.com/molassesapp/molasses-node/commit/92631d2decce4ac06bf4b6d2f8e2860d257195de))
+
+
+
+
+
 # [0.6.0](https://github.com/molassesapp/molasses-node/compare/v0.5.0...v0.6.0) (2021-01-19)
 
 **Note:** Version bump only for package molasses-node
