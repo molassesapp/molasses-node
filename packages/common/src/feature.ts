@@ -6,7 +6,6 @@ export interface Feature {
   // variants: Variant[];
   active: boolean
   segments: FeatureSegment[]
-  // tags: Tag[];
 }
 
 export interface FeatureSegment {
@@ -28,7 +27,11 @@ export enum SegmentType {
   alwaysExperiment = "alwaysExperiment",
   everyoneElse = "everyoneElse",
 }
-
+export enum UserParamType {
+  number = "number",
+  boolean = "boolean",
+  string = "string",
+}
 export enum Operator {
   any = "any",
   all = "all",
@@ -38,15 +41,17 @@ export enum Operator {
   doesNotEqual = "doesNotEqual",
   contains = "contains",
   doesNotContain = "doesNotContain",
-  greaterThan = "greaterThan",
-  lessThan = "lessThan",
-  greaterThanOrEqualTo = "greaterThanOrEqualTo",
-  lessThanOrEqualTo = "lessThanOrEqualTo",
+  greaterThan = "gt",
+  lessThan = "lt",
+  greaterThanOrEqualTo = "gte",
+  lessThanOrEqualTo = "lte",
 }
+
+export type InputType = string | number | boolean
 export interface User {
   id: string
   params: {
-    [key: string]: string
+    [key: string]: InputType
   }
 }
 
@@ -119,16 +124,90 @@ const isUserInSegment = (user: User, s: FeatureSegment) => {
 
     let paramExists = Boolean(user.params[constraint.userParam])
     let userValue = user.params[constraint.userParam]
+
     if (constraint.userParam == "id") {
       paramExists = true
       userValue = user.id
     }
-    if (meetsConstraint(userValue, paramExists, constraint)) {
-      constraintsMet = constraintsMet + 1
+
+    switch (constraint.userParamType) {
+      case UserParamType.number:
+        const valueNumber = parseNumber(userValue)
+        if (meetsConstraintForNumber(valueNumber as number, paramExists, constraint)) {
+          constraintsMet = constraintsMet + 1
+        }
+        break
+      case UserParamType.boolean:
+        const valueBoolean = parseBoolean(userValue)
+        if (meetsConstraintForBool(valueBoolean as boolean, paramExists, constraint)) {
+          constraintsMet = constraintsMet + 1
+        }
+        break
+      default:
+        const value = parseString(userValue)
+        if (meetsConstraint(value as string, paramExists, constraint)) {
+          constraintsMet = constraintsMet + 1
+        }
+        break
     }
   }
 
   return constraintsMet >= constraintsToBeMet
+}
+
+const parseNumber = (value: string | boolean | number): number => {
+  switch (typeof value) {
+    case "boolean":
+      return 0
+    case "number":
+      return value
+    default:
+      return parseFloat(value)
+  }
+}
+
+const parseString = (value: string | boolean | number): string => {
+  switch (typeof value) {
+    case "boolean":
+    case "number":
+      return value.toString()
+    default:
+      return value
+  }
+}
+
+const parseBoolean = (value: string | boolean | number): boolean => {
+  switch (typeof value) {
+    case "string":
+      return value === "true"
+    case "number":
+      return !!value
+    default:
+      return value
+  }
+}
+
+const meetsConstraintForBool = (
+  userValue: boolean,
+  paramExists: boolean,
+  constraint: UserConstraint,
+) => {
+  const value = constraint.values === "true"
+  switch (constraint.operator) {
+    case Operator.equals:
+      if (paramExists && userValue === value) {
+        return true
+      }
+      break
+    case Operator.doesNotEqual:
+      if (paramExists && userValue !== value) {
+        return true
+      }
+      break
+    default:
+      return false
+  }
+  return false
 }
 
 const meetsConstraint = (userValue: string, paramExists: boolean, constraint: UserConstraint) => {
@@ -160,6 +239,49 @@ const meetsConstraint = (userValue: string, paramExists: boolean, constraint: Us
       break
     case Operator.doesNotContain:
       if (paramExists && !userValue.includes(constraint.values)) {
+        return true
+      }
+      break
+    default:
+      return false
+  }
+  return false
+}
+
+const meetsConstraintForNumber = (
+  userValue: number,
+  paramExists: boolean,
+  constraint: UserConstraint,
+) => {
+  const value = parseFloat(constraint.values)
+  switch (constraint.operator) {
+    case Operator.equals:
+      if (paramExists && userValue === value) {
+        return true
+      }
+      break
+    case Operator.doesNotEqual:
+      if (paramExists && userValue !== value) {
+        return true
+      }
+      break
+    case Operator.lessThan:
+      if (paramExists && userValue < value) {
+        return true
+      }
+      break
+    case Operator.lessThanOrEqualTo:
+      if (paramExists && userValue <= value) {
+        return true
+      }
+      break
+    case Operator.greaterThan:
+      if (paramExists && userValue > value) {
+        return true
+      }
+      break
+    case Operator.greaterThanOrEqualTo:
+      if (paramExists && userValue >= value) {
         return true
       }
       break

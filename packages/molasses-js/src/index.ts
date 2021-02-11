@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
-import { Feature, User, isActive } from "@molassesapp/common"
+import { Feature, User, isActive, InputType } from "@molassesapp/common"
 
 /** Options for the `MolassesClient` - APIKey is required */
 export type Options = {
@@ -16,11 +16,11 @@ export type Options = {
 }
 
 type EventOptions = {
-  featureId: string
+  featureId?: string
   userId: string
-  featureName: string
-  event: "experiment_started" | "experiment_success"
-  tags?: { [key: string]: string }
+  featureName?: string
+  event: string
+  tags?: { [key: string]: InputType }
   testType?: string
 }
 
@@ -116,12 +116,35 @@ export class MolassesClient {
   }
 
   /**
+   * Sends a tracking event. This can include additional metadata. This doesn't need the client to be initialized to send
+   * @param {string} key  - the name of the feature flag
+   * @param {Object} properties - any metadata for the event
+   * @param {User} [user] - The user that the feature flag will be evaluated against. Defaults to the identified user
+   */
+  track(eventName: string, properties: { [key: string]: InputType }, user?: User) {
+    if (!user && this.user) {
+      user = this.user
+    }
+
+    if (user && eventName !== "") {
+      this.uploadEvent({
+        event: eventName,
+        tags: {
+          ...user.params,
+          ...properties,
+        },
+        userId: user.id,
+      })
+    }
+  }
+
+  /**
    * Sends a tracking event when a user starts an A/B test. This can include additional metadata.
    * @param {string} key  - the name of the feature flag
    * @param {Object} additionalDetails - additonal metadata for the event
    * @param {User} [user] - The user that the feature flag will be evaluated against.
    */
-  experimentStarted(key: string, additionalDetails: { [key: string]: string }, user?: User) {
+  experimentStarted(key: string, additionalDetails: { [key: string]: InputType }, user?: User) {
     if (!this.initiated) {
       return false
     }
@@ -130,7 +153,7 @@ export class MolassesClient {
       user = this.user
     }
 
-    if (user && key != "") {
+    if (user && key !== "") {
       const feature = this.featuresCache[key]
       if (!feature) {
         console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
@@ -157,7 +180,7 @@ export class MolassesClient {
    * @param {Object} additionalDetails - additonal metadata for the event
    * @param {User} [user] - The user that the feature flag will be evaluated against.
    */
-  experimentSuccess(key: string, additionalDetails: { [key: string]: string }, user?: User) {
+  experimentSuccess(key: string, additionalDetails: { [key: string]: InputType }, user?: User) {
     if (!this.initiated) {
       return false
     }
@@ -166,7 +189,7 @@ export class MolassesClient {
       user = this.user
     }
 
-    if (user && key != "") {
+    if (user && key !== "") {
       const feature = this.featuresCache[key]
       if (!feature) {
         console.warn(`Molasses - feature ${key} doesn't exist in your environment`)
