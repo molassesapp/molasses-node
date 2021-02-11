@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
-import { Feature, User, isActive } from "@molassesapp/common"
+import { Feature, User, isActive, InputType } from "@molassesapp/common"
 const EventSource = require("eventsource")
 const winston = require("winston")
 /** Options for the `MolassesClient` - APIKey is required */
@@ -19,11 +19,11 @@ export type Options = {
 }
 
 type EventOptions = {
-  featureId: string
+  featureId?: string
   userId: string
-  featureName: string
-  event: "experiment_started" | "experiment_success"
-  tags?: { [key: string]: string }
+  featureName?: string
+  event: string
+  tags?: { [key: string]: InputType }
   testType?: string
 }
 
@@ -198,12 +198,34 @@ export class MolassesClient {
   }
 
   /**
+   * Sends a tracking event. This can include additional metadata. This doesn't need the client to be initialized to send
+   * @param {string} key  - the name of the feature flag
+   * @param {Object} properties - any metadata for the event
+   * @param {User} user - The user that the feature flag will be evaluated against. Defaults to the identified user
+   */
+  track(eventName: string, additionalDetails: { [key: string]: InputType }, user: User) {
+    if (!user || !user.id) {
+      return false
+    }
+    return this.uploadEvent({
+      event: eventName,
+      tags: {
+        ...user.params,
+        ...additionalDetails,
+      },
+      userId: user.id,
+    }).catch(() => {
+      this.logger.error("failed to upload track event")
+    })
+  }
+
+  /**
    * Sends a tracking event when a user starts an A/B test. This can include additional metadata.
    * @param {string} key  - the name of the feature flag
    * @param {Object} additionalDetails - additonal metadata for the event
    * @param {User} [user] - The user that the feature flag will be evaluated against.
    */
-  experimentStarted(key: string, additionalDetails: { [key: string]: string }, user: User) {
+  experimentStarted(key: string, additionalDetails: { [key: string]: InputType }, user: User) {
     if (!this.initiated || !user || !user.id) {
       return false
     }
@@ -234,7 +256,7 @@ export class MolassesClient {
    * @param {Object} additionalDetails - additonal metadata for the event
    * @param {User} [user] - The user that the feature flag will be evaluated against.
    */
-  experimentSuccess(key: string, additionalDetails: { [key: string]: string }, user: User) {
+  experimentSuccess(key: string, additionalDetails: { [key: string]: InputType }, user: User) {
     if (!this.initiated || !user || !user.id) {
       return false
     }

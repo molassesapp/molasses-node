@@ -3,7 +3,7 @@
  */
 import { MolassesClient } from "../src"
 import mockAxios from "jest-mock-axios"
-import { Feature, SegmentType, Operator } from "@molassesapp/common"
+import { Feature, SegmentType, Operator, UserParamType } from "@molassesapp/common"
 const user = {
   id: "123",
   params: {
@@ -324,6 +324,81 @@ describe("@molassesapp/molasses-server", () => {
         features: [
           {
             active: true,
+            description: "fooo",
+            key: "Numbers and Bools",
+            segments: [
+              {
+                percentage: 100,
+                segmentType: SegmentType.alwaysControl,
+                constraint: Operator.all,
+                userConstraints: [
+                  {
+                    userParam: "lt12",
+                    userParamType: UserParamType.number,
+                    operator: Operator.lessThan,
+                    values: "12",
+                  },
+                  {
+                    userParam: "eqTrue",
+                    userParamType: "boolean",
+                    operator: Operator.equals,
+                    values: "true",
+                  },
+                  {
+                    userParam: "doesNotEqualFalse",
+                    userParamType: "boolean",
+                    operator: Operator.doesNotEqual,
+                    values: "false",
+                  },
+                  {
+                    userParam: "lte12",
+                    userParamType: UserParamType.number,
+                    operator: Operator.lessThanOrEqualTo,
+                    values: "12",
+                  },
+                  {
+                    userParam: "gt12",
+                    userParamType: UserParamType.number,
+                    operator: Operator.greaterThan,
+                    values: "12",
+                  },
+                  {
+                    userParam: "gte12",
+                    userParamType: UserParamType.number,
+                    operator: Operator.greaterThanOrEqualTo,
+                    values: "12",
+                  },
+                ],
+              },
+              {
+                percentage: 100,
+                segmentType: SegmentType.alwaysExperiment,
+                constraint: Operator.all,
+                userConstraints: [
+                  {
+                    userParam: "eq12",
+                    userParamType: UserParamType.number,
+                    operator: Operator.equals,
+                    values: "12",
+                  },
+                  {
+                    userParam: "dneq12",
+                    userParamType: UserParamType.number,
+                    operator: Operator.doesNotEqual,
+                    values: "12",
+                  },
+                ],
+              },
+              {
+                percentage: 0,
+                segmentType: SegmentType.everyoneElse,
+                constraint: Operator.all,
+                userConstraints: [],
+              },
+            ],
+          },
+          {
+            active: true,
             description: "foo",
             key: "FOO_TEST",
             segments: [
@@ -432,6 +507,61 @@ describe("@molassesapp/molasses-server", () => {
             id: "123",
             params: {
               isScaredUser: "false",
+            },
+          }),
+        ).toBeTruthy()
+
+        expect(
+          client.isActive("Numbers and Bools", {
+            id: "1234",
+            params: {
+              lt12: 11,
+              eqTrue: true,
+              doesNotEqualFalse: true,
+              lte12: 11,
+              gt12: 13,
+              gte12: 12,
+              eq12: 13,
+              dneq12: 12,
+            },
+          }),
+        ).toBeFalsy()
+        expect(
+          client.isActive("Numbers and Bools", {
+            id: "1234",
+            params: {
+              eq12: 13,
+              dneq12: 12,
+            },
+          }),
+        ).toBeFalsy()
+        expect(
+          client.isActive("Numbers and Bools", {
+            id: "1234",
+            params: {
+              lt12: 11,
+              eqTrue: true,
+              doesNotEqualFalse: false,
+              lte12: 11,
+              gt12: 13,
+              gte12: 12,
+              eq12: 12,
+              dneq12: 11,
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("Numbers and Bools", {
+            id: "1234",
+            params: {
+              lt12: 12,
+              eqTrue: false,
+              doesNotEqualFalse: false,
+              lte12: 13,
+              gt12: 11,
+              gte12: 11,
+              eq12: 12,
+              dneq12: 11,
             },
           }),
         ).toBeTruthy()
@@ -557,6 +687,20 @@ describe("@molassesapp/molasses-server", () => {
           userId: "123",
         },
         { headers: { Authorization: "Bearer testapikey" } },
+      )
+      client.experimentStarted(
+        "FOO_TEST",
+        {
+          test: "123",
+        },
+        user,
+      )
+      client.track(
+        "I am a track event",
+        {
+          test: "123",
+        },
+        user,
       )
       client.experimentSuccess(
         "FOO_TEST",

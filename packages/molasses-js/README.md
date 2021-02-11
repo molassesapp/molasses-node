@@ -63,38 +63,58 @@ You can check if a feature is active for a user who is anonymous by just calling
 client.isActive("FOO_TEST")
 ```
 
-### Experiments
+### Track Events
 
-If you are not auto tracking experiments, to track whether an experiment has started you can call `experimentStarted`. `experimentStarted` takes the feature's name, the molasses User and any additional parameters for the event.
+If you want to track any event call the `track` method. `track` takes the event's name, the molasses User and any additional parameters for the event.
 
 ```js
-client.ExperimentSuccess(
-  "GOOGLE_SSO",
+client.track(
+  "Checkout complete",
+  {
+    version: "v2.3.0",
+  },
   {
     id: "baz",
     params: {
       teamId: "12356",
     },
-  },
-  {
-    version: "v2.3.0",
   },
 )
 ```
 
-To track whether an experiment was successful you can call `ExperimentSuccess`. ExperimentSuccess takes the feature's name, the molasses User and any additional parameters for the event.
+### Experiments
+
+If you are not auto tracking experiments, to track whether an experiment has started you can call the `experimentStarted` method. `experimentStarted` takes the feature's name, the molasses User and any additional parameters for the event.
 
 ```js
-client.ExperimentSuccess(
+client.experimentStarted(
   "GOOGLE_SSO",
+  {
+    version: "v2.3.0",
+  },
   {
     id: "baz",
     params: {
       teamId: "12356",
     },
   },
+)
+```
+
+To track whether an experiment was successful you can call the `experimentSuccess` method. `experimentSuccess` takes the feature's name, the molasses User and any additional parameters for the event.
+
+```js
+client.experimentSuccess(
+  "GOOGLE_SSO",
+
   {
     version: "v2.3.0",
+  },
+  {
+    id: "baz",
+    params: {
+      teamId: "12356",
+    },
   },
 )
 ```
@@ -127,11 +147,15 @@ Will check if feature is active for ALL users
 
 Will check if the feature is active for this particular based on the segment they are in.
 
-### `experimentStarted(featureKey: string, additionalInformation: string[string], user: User)`
+### `track(eventName: string, additionalInformation: string[InputType], user: User)`
+
+Will send a track event. This includes the event name, the user data, and other metadata. If you want to include additional metadata use the `additionalInformation` argument.
+
+### `experimentStarted(featureKey: string, additionalInformation: string[InputType], user: User)`
 
 Will send an event started message when a user starts an a/b tests. This includes, whether user was in the experimental group (control or experiment), the experiment that was being tested and other metadata. If you want to include additional metadata use the `additionalInformation` argument.
 
-### `experimentSuccess(featureKey: string, additionalInformation: string[string], user: User): void`
+### `experimentSuccess(featureKey: string, additionalInformation: string[InputType], user: User): void`
 
 Will send an event success message when a user completes a set goal. This includes, whether user was in the experimental group (control or experiment), the experiment that was being tested and other metadata. If you want to include additional metadata use the `additionalInformation` argument.
 
