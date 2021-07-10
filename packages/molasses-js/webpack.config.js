@@ -34,6 +34,5 @@ const config = {
     extensions: [".jsx", ".js", ".tsx", ".ts"],
   },
 }
-config.plugins = [new webpack.optimize.OccurrenceOrderPlugin()]
 
 module.exports = config
