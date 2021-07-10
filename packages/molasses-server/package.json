@@ -19,7 +19,7 @@
   "dependencies": {
     "@molassesapp/common": "^0.7.0",
     "axios": "^0.21.1",
-    "eventsource": "^1.0.7",
+    "eventsource": "^1.1.0",
     "winston": "^3.3.3"
   },
   "publishConfig": {

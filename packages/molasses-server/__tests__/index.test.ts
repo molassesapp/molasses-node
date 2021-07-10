@@ -10,7 +10,7 @@ const user = {
     isScaredUser: "false",
   },
 }
-
+global.setImmediate = global.setTimeout
 jest.mock("eventsource")
 const { sources } = require("eventsourcemock")
 const response: {
@@ -399,6 +399,62 @@ describe("@molassesapp/molasses-server", () => {
           },
           {
             active: true,
+            description: "semverA",
+            key: "semverA",
+            segments: [
+              {
+                percentage: 100,
+                segmentType: SegmentType.alwaysExperiment,
+                constraint: Operator.any,
+                userConstraints: [
+                  {
+                    userParam: "eq",
+                    userParamType: UserParamType.semver,
+                    operator: Operator.equals,
+                    values: "3.2.0",
+                  },
+                  {
+                    userParam: "dneq",
+                    userParamType: UserParamType.semver,
+                    operator: Operator.doesNotEqual,
+                    values: "3.1.0",
+                  },
+                  {
+                    userParam: "lt",
+                    userParamType: UserParamType.semver,
+                    operator: Operator.lessThan,
+                    values: "3.2.0",
+                  },
+                  {
+                    userParam: "lte",
+                    userParamType: UserParamType.semver,
+                    operator: Operator.lessThanOrEqualTo,
+                    values: "1.2.0",
+                  },
+                  {
+                    userParam: "gt",
+                    userParamType: UserParamType.semver,
+                    operator: Operator.greaterThan,
+                    values: "1.0.0",
+                  },
+                  {
+                    userParam: "gte",
+                    userParamType: UserParamType.semver,
+                    operator: Operator.greaterThanOrEqualTo,
+                    values: "4.0.0",
+                  },
+                ],
+              },
+              {
+                percentage: 0,
+                segmentType: SegmentType.everyoneElse,
+                constraint: Operator.all,
+                userConstraints: [],
+              },
+            ],
+          },
+          {
+            active: true,
             description: "foo",
             key: "FOO_TEST",
             segments: [
@@ -565,6 +621,114 @@ describe("@molassesapp/molasses-server", () => {
             },
           }),
         ).toBeTruthy()
+        expect(client.isActive("semverA", { id: "123", params: { dneq: "3.1.0" } })).toBeFalsy()
+        expect(client.isActive("semverA", { id: "123", params: { dneq: "3.2.0" } })).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              lt: "3.0.9",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              lt: "3.2.9",
+            },
+          }),
+        ).toBeFalsy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              lte: "0.0.9",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              lte: "1.2.0",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              lte: "3.2.9",
+            },
+          }),
+        ).toBeFalsy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              gt: "3.0.9",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              gt: "0.2.9",
+            },
+          }),
+        ).toBeFalsy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              gte: "4.0.9",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              gte: "4.0.0",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              gte: "4.0.0",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              eq: "3.2.0",
+            },
+          }),
+        ).toBeTruthy()
+        expect(
+          client.isActive("semverA", {
+            id: "123",
+            params: {
+              dneq: "3.1.0",
+              gte: "3.2.9",
+            },
+          }),
+        ).toBeFalsy()
         done()
       })
       .catch((reason) => {

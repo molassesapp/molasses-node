@@ -1,4 +1,5 @@
 const { crc32 } = require("crc")
+const compare = require("semver/functions/compare-loose")
 export interface Feature {
   id?: string
   key: string
@@ -27,11 +28,14 @@ export enum SegmentType {
   alwaysExperiment = "alwaysExperiment",
   everyoneElse = "everyoneElse",
 }
+
 export enum UserParamType {
   number = "number",
   boolean = "boolean",
   string = "string",
+  semver = "semver",
 }
+
 export enum Operator {
   any = "any",
   all = "all",
@@ -143,6 +147,12 @@ const isUserInSegment = (user: User, s: FeatureSegment) => {
           constraintsMet = constraintsMet + 1
         }
         break
+      case UserParamType.semver:
+        const valueSemver = parseString(userValue)
+        if (meetsConstraintForSemVer(valueSemver as string, paramExists, constraint)) {
+          constraintsMet = constraintsMet + 1
+        }
+        break
       default:
         const value = parseString(userValue)
         if (meetsConstraint(value as string, paramExists, constraint)) {
@@ -201,6 +211,51 @@ const meetsConstraintForBool = (
       break
     case Operator.doesNotEqual:
       if (paramExists && userValue !== value) {
+        return true
+      }
+      break
+    default:
+      return false
+  }
+  return false
+}
+const meetsConstraintForSemVer = (
+  userValue: string,
+  paramExists: boolean,
+  constraint: UserConstraint,
+) => {
+  const value = userValue
+  if (!paramExists) {
+    return false
+  }
+  switch (constraint.operator) {
+    case Operator.equals:
+      if (compare(value, constraint.values) === 0) {
+        return true
+      }
+      break
+    case Operator.doesNotEqual:
+      if (compare(value, constraint.values) !== 0) {
+        return true
+      }
+      break
+    case Operator.lessThan:
+      if (compare(value, constraint.values) < 0) {
+        return true
+      }
+      break
+    case Operator.lessThanOrEqualTo:
+      if (compare(value, constraint.values) <= 0) {
+        return true
+      }
+      break
+    case Operator.greaterThan:
+      if (compare(value, constraint.values) > 0) {
+        return true
+      }
+      break
+    case Operator.greaterThanOrEqualTo:
+      if (compare(value, constraint.values) >= 0) {
         return true
       }
       break
